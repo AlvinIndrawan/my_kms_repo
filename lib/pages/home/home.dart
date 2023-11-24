@@ -11,6 +11,7 @@ class Home extends StatelessWidget {
           'Welcome to KMS,',
           style: TextStyle(
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
         Text(

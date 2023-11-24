@@ -17,8 +17,12 @@ class MyApp extends StatelessWidget {
       // Application theme data, you can set the colors for the application as
       // you want
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor:
+              Colors.white, // Set the background color of the AppBar
+        ),
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: const Color(0xffffffff),
+          primary: const Color(0xff9e9e9e),
           secondary: const Color(0xff000000),
         ),
       ),

@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'home.dart';
+import 'search.dart';
+import 'create-knowledge.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -16,14 +18,8 @@ class _HomepageState extends State<Homepage> {
   List<Widget> _widgetOptions = <Widget>[
     //Home
     Home(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Search',
-      style: optionStyle,
-    ),
+    Search(),
+    CreateKnowledge(),
     Text(
       'Index 3: Create Knowledge',
       style: optionStyle,
