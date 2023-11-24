@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // Application name
       title: 'KMS',
+      debugShowCheckedModeBanner: false,
       // Application theme data, you can set the colors for the application as
       // you want
       theme: ThemeData(
