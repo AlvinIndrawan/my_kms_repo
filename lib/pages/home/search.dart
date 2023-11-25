@@ -64,6 +64,7 @@ class CustomCard extends StatelessWidget {
               'assets/images/contoh card.png',
               fit: BoxFit.cover,
               width: MediaQuery.of(context).size.width,
+              height: 180,
             ),
           ),
           Padding(

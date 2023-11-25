@@ -92,28 +92,6 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         SizedBox(
           height: 10,
         ),
-        //PENJELASAN
-        Row(
-          children: [
-            Text('Penjelasan'),
-            Text(
-              '*', // Add your mandatory icon (e.g., an asterisk)
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            )
-          ],
-        ),
-        TextField(
-          maxLines: 5,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Penjelasan isi knowledge',
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
         //UPLOAD GAMBAR COVER
         Text('Gambar cover'),
         SizedBox(
@@ -132,6 +110,29 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
               backgroundColor:
                   MaterialStateProperty.all<Color>(Color(0xffc1c1c1)),
             ),
+          ),
+        ),
+
+        SizedBox(
+          height: 10,
+        ),
+        //PENJELASAN
+        Row(
+          children: [
+            Text('Penjelasan'),
+            Text(
+              '*', // Add your mandatory icon (e.g., an asterisk)
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            )
+          ],
+        ),
+        TextField(
+          maxLines: 7,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Penjelasan isi knowledge',
           ),
         ),
         SizedBox(
