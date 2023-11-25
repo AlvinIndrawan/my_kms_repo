@@ -29,7 +29,17 @@ class _RegisterState extends State<Register> {
               ),
             ),
             Spacer(),
-            Text('Nama'),
+            Row(
+              children: [
+                Text('Nama'),
+                Text(
+                  '*', // Add your mandatory icon (e.g., an asterisk)
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
             TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -39,7 +49,17 @@ class _RegisterState extends State<Register> {
             SizedBox(
               height: 10,
             ),
-            Text('Jurusan'),
+            Row(
+              children: [
+                Text('Jurusan'),
+                Text(
+                  '*', // Add your mandatory icon (e.g., an asterisk)
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
@@ -71,7 +91,17 @@ class _RegisterState extends State<Register> {
             SizedBox(
               height: 10,
             ),
-            Text('NIM/NIDN'),
+            Row(
+              children: [
+                Text('NIM/NIDN'),
+                Text(
+                  '*', // Add your mandatory icon (e.g., an asterisk)
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -82,7 +112,17 @@ class _RegisterState extends State<Register> {
             SizedBox(
               height: 10,
             ),
-            Text('Password'),
+            Row(
+              children: [
+                Text('Password'),
+                Text(
+                  '*', // Add your mandatory icon (e.g., an asterisk)
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
             TextField(
               obscureText: true,
               decoration: InputDecoration(
@@ -93,7 +133,17 @@ class _RegisterState extends State<Register> {
             SizedBox(
               height: 10,
             ),
-            Text('Confirm Password'),
+            Row(
+              children: [
+                Text('Confirm Password'),
+                Text(
+                  '*', // Add your mandatory icon (e.g., an asterisk)
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
             TextField(
               obscureText: true,
               decoration: InputDecoration(
