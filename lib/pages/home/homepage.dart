@@ -4,6 +4,7 @@ import 'home.dart';
 import 'search.dart';
 import 'create-knowledge.dart';
 import 'myknowledge.dart';
+import 'profile.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -22,10 +23,7 @@ class _HomepageState extends State<Homepage> {
     Search(),
     CreateKnowledge(),
     Myknowledge(),
-    Text(
-      'Hello World!',
-      style: optionStyle,
-    ),
+    Profile(),
   ];
 
   void _onItemTapped(int index) {
