@@ -9,11 +9,15 @@ class Profile extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: 300,
           decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(25),
-              bottomLeft: Radius.circular(25),
-            ),
+            color: Colors.black, // Set container background color
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5), // Set shadow color
+                spreadRadius: 3, // Set the spread radius of the shadow
+                blurRadius: 5, // Set the blur radius of the shadow
+                offset: Offset(0, 3), // Set the offset of the shadow
+              ),
+            ],
           ),
           child: Center(
             child: Column(
@@ -28,6 +32,7 @@ class Profile extends StatelessWidget {
                     color: Colors.black, // Icon color
                   ),
                 ),
+                SizedBox(height: 20),
                 Text(
                   'Nama User',
                   style: TextStyle(
