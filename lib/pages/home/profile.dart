@@ -35,6 +35,7 @@ class Profile extends StatelessWidget {
                 SizedBox(height: 20),
                 Text(
                   'Nama User',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'search.dart';
+import 'detail-knowledge.dart';
 import 'create-knowledge.dart';
 import 'myknowledge.dart';
 import 'profile.dart';
@@ -14,12 +15,10 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   List<Widget> _widgetOptions = <Widget>[
     //Home
     Home(),
-    Search(),
+    DetailKnowledge(),
     CreateKnowledge(),
     Myknowledge(),
     Profile(),
