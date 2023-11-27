@@ -108,7 +108,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                 )),
             style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xffc1c1c1)),
+                  MaterialStateProperty.all<Color>(Color(0xffdedede)),
             ),
           ),
         ),
@@ -154,7 +154,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                 )),
             style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xffc1c1c1)),
+                  MaterialStateProperty.all<Color>(Color(0xffdedede)),
             ),
           ),
         ),

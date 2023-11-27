@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'home/homepage.dart';
+import 'register.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -52,6 +54,10 @@ class Login extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 // Insert the code you want to run when the button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Homepage()),
+                );
               },
               child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 15),
@@ -69,6 +75,10 @@ class Login extends StatelessWidget {
             child: OutlinedButton(
               onPressed: () {
                 // Insert the code you want to run when the button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Register()),
+                );
               },
               child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 15),

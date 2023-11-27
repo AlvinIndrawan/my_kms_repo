@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -220,6 +221,7 @@ class _RegisterState extends State<Register> {
             child: OutlinedButton(
               onPressed: () {
                 // Insert the code you want to run when the button is pressed
+                Navigator.pop(context);
               },
               child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 15),

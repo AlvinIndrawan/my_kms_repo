@@ -12,7 +12,7 @@ class DetailKnowledge extends StatelessWidget {
         Text(
           'Belajar Framework Bootstrap Untuk Pemrograman Web',
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -64,7 +64,111 @@ class DetailKnowledge extends StatelessWidget {
           textdummy,
           textAlign: TextAlign.justify,
         ),
+        SizedBox(
+          height: 30,
+        ),
+        Text(
+          'Attachment File',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 5),
+        Container(
+          padding: EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Color(0xffdedede),
+            border: Border.all(
+              color: Colors.grey,
+              width: 1.0,
+              style: BorderStyle.solid,
+            ),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/images/icon file.png',
+                height: 20,
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Nama File.pdf',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Spacer(),
+              Icon(Icons.file_download, size: 20),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Text(
+          'Comments',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 10),
+        TextField(
+          decoration: InputDecoration(
+            suffixIcon: Icon(Icons.send),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
+            hintText: 'Tulis komentar..',
+          ),
+        ),
+        SizedBox(height: 10),
+        Comment(),
+        Comment(),
       ],
+    );
+  }
+}
+
+//CUSTOM WIDGET
+class Comment extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Color(0xffdedede),
+        border: Border.all(
+          color: Colors.grey,
+          width: 1.0,
+          style: BorderStyle.solid,
+        ),
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Nama User',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tortor id aliquet lectus proin nibh nisl condimentum id.',
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

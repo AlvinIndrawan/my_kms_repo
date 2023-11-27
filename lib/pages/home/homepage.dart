@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kms_esa_unggul/pages/home/detail-knowledge.dart';
 import 'home.dart';
 import 'search.dart';
-import 'detail-knowledge.dart';
 import 'create-knowledge.dart';
 import 'myknowledge.dart';
 import 'profile.dart';
@@ -18,7 +18,7 @@ class _HomepageState extends State<Homepage> {
   List<Widget> _widgetOptions = <Widget>[
     //Home
     Home(),
-    DetailKnowledge(),
+    Search(),
     CreateKnowledge(),
     Myknowledge(),
     Profile(),
