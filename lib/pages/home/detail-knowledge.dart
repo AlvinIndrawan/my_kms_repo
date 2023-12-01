@@ -9,7 +9,7 @@ class DetailKnowledge extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'KMS',
+          'Knowledge Management System',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
