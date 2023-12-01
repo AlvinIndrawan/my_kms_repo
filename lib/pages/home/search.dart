@@ -8,6 +8,8 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   // Add your state variables here
+  String selectedOptionCategory = 'Project Base';
+  String selectedOptionMatkul = 'Semua';
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,75 @@ class _SearchState extends State<Search> {
             ),
             hintText: 'Cari Knowledge..',
           ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Row(
+          children: [
+            Container(
+              width: (MediaQuery.of(context).size.width - 30) / 2,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                ),
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: DropdownButton<String>(
+                value: selectedOptionCategory,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedOptionCategory = newValue!;
+                  });
+                },
+                items: ['Project Base', 'Modul Kuliah', 'Informasi', 'Helpdesk']
+                    .map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                isExpanded: true,
+                underline: Container(),
+              ),
+            ),
+            Container(
+              width: (MediaQuery.of(context).size.width - 30) / 2,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                ),
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: DropdownButton<String>(
+                value: selectedOptionMatkul,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedOptionMatkul = newValue!;
+                  });
+                },
+                items: [
+                  'Semua',
+                  'Pemrograman Web',
+                  'Algoritma',
+                  'Pemrograman Mobile'
+                ].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                isExpanded: true,
+                underline: Container(),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 25,
