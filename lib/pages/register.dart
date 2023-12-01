@@ -92,68 +92,82 @@ class _RegisterState extends State<Register> {
           SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              Text('Jurusan'),
-              Text(
-                '*', // Add your mandatory icon (e.g., an asterisk)
-                style: TextStyle(
-                  color: Colors.red,
-                ),
-              )
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1.0,
-                style: BorderStyle.solid,
-              ),
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            child: DropdownButton<String>(
-              value: selectedOptionJurusan,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedOptionJurusan = newValue!;
-                });
-              },
-              items: ['Teknik Informatika', 'Sistem Informasi']
-                  .map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              isExpanded: true,
-              underline: Container(),
-            ),
-          ),
+          (selectedOptionUser == 'Mahasiswa' || selectedOptionUser == 'Dosen')
+              ? Row(
+                  children: [
+                    Text('Jurusan'),
+                    Text(
+                      '*', // Add your mandatory icon (e.g., an asterisk)
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+                  ],
+                )
+              : SizedBox(),
+          (selectedOptionUser == 'Mahasiswa' || selectedOptionUser == 'Dosen')
+              ? Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1.0,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: DropdownButton<String>(
+                    value: selectedOptionJurusan,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedOptionJurusan = newValue!;
+                      });
+                    },
+                    items: ['Teknik Informatika', 'Sistem Informasi']
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    isExpanded: true,
+                    underline: Container(),
+                  ),
+                )
+              : SizedBox(),
           SizedBox(
-            height: 10,
+            height: (selectedOptionUser == 'Mahasiswa' ||
+                    selectedOptionUser == 'Dosen')
+                ? 10
+                : 0,
           ),
-          Row(
-            children: [
-              Text('NIM/NIDN'),
-              Text(
-                '*', // Add your mandatory icon (e.g., an asterisk)
-                style: TextStyle(
-                  color: Colors.red,
-                ),
-              )
-            ],
-          ),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'NIM/NIDN',
-            ),
-          ),
+          (selectedOptionUser == 'Mahasiswa' || selectedOptionUser == 'Dosen')
+              ? Row(
+                  children: [
+                    Text('NIM/NIDN'),
+                    Text(
+                      '*', // Add your mandatory icon (e.g., an asterisk)
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+                  ],
+                )
+              : SizedBox(),
+          (selectedOptionUser == 'Mahasiswa' || selectedOptionUser == 'Dosen')
+              ? TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'NIM/NIDN',
+                  ),
+                )
+              : SizedBox(),
           SizedBox(
-            height: 10,
+            height: (selectedOptionUser == 'Mahasiswa' ||
+                    selectedOptionUser == 'Dosen')
+                ? 10
+                : 0,
           ),
           Row(
             children: [
