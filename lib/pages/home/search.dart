@@ -165,6 +165,22 @@ class CustomCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
+                        'Kategori : ',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        'Project Base',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
                         'Mata Kuliah : ',
                         style: TextStyle(
                           fontSize: 15,
