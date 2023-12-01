@@ -6,129 +6,147 @@ class DetailKnowledge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.all(15),
-      children: [
-        Text(
-          'Belajar Framework Bootstrap Untuk Pemrograman Web',
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'KMS',
           style: TextStyle(
-            fontSize: 20,
+            color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
-        Image.asset(
-          'assets/images/contoh card.png',
-          fit: BoxFit.cover,
-          width: MediaQuery.of(context).size.width,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          onPressed: () {
+            // Navigate back to the previous screen
+            Navigator.pop(context);
+          },
         ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            Text(
-              'Mata Kuliah : ',
-              style: TextStyle(
-                fontSize: 15,
-              ),
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(15),
+        children: [
+          Text(
+            'Belajar Framework Bootstrap Untuk Pemrograman Web',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              'Pemrograman Web',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              'Author : ',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-            Text(
-              'Alvin Indrawan',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Text(
-          textdummy,
-          textAlign: TextAlign.justify,
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Text(
-          'Attachment File',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
           ),
-        ),
-        SizedBox(height: 5),
-        Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: Color(0xffdedede),
-            border: Border.all(
-              color: Colors.grey,
-              width: 1.0,
-              style: BorderStyle.solid,
-            ),
-            borderRadius: BorderRadius.circular(4.0),
+          SizedBox(height: 10),
+          Image.asset(
+            'assets/images/contoh card.png',
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width,
           ),
-          child: Row(
+          SizedBox(
+            height: 10,
+          ),
+          Row(
             children: [
-              Image.asset(
-                'assets/images/icon file.png',
-                height: 20,
-              ),
-              SizedBox(width: 10),
               Text(
-                'Nama File.pdf',
+                'Mata Kuliah : ',
                 style: TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Spacer(),
-              Icon(Icons.file_download, size: 20),
+              Text(
+                'Pemrograman Web',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
             ],
           ),
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Text(
-          'Comments',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              Text(
+                'Author : ',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              Text(
+                'Alvin Indrawan',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ],
           ),
-        ),
-        SizedBox(height: 10),
-        TextField(
-          decoration: InputDecoration(
-            suffixIcon: Icon(Icons.send),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            textdummy,
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Attachment File',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
             ),
-            hintText: 'Tulis komentar..',
           ),
-        ),
-        SizedBox(height: 10),
-        Comment(),
-        Comment(),
-      ],
+          SizedBox(height: 5),
+          Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Color(0xffdedede),
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.0,
+                style: BorderStyle.solid,
+              ),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/images/icon file.png',
+                  height: 20,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Nama File.pdf',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Spacer(),
+                Icon(Icons.file_download, size: 20),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Comments',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          TextField(
+            decoration: InputDecoration(
+              suffixIcon: Icon(Icons.send),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+              hintText: 'Tulis komentar..',
+            ),
+          ),
+          SizedBox(height: 10),
+          Comment(),
+          Comment(),
+        ],
+      ),
     );
   }
 }

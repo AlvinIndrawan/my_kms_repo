@@ -16,22 +16,61 @@ class Login extends StatelessWidget {
         children: [
           Spacer(),
           Center(
+            child: Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(
+                    15.0), // Set container background color
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5), // Set shadow color
+                    spreadRadius: 3, // Set the spread radius of the shadow
+                    blurRadius: 5, // Set the blur radius of the shadow
+                    offset: Offset(0, 3), // Set the offset of the shadow
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                'assets/images/logo ueu.png',
+                height: 80,
+                // width: MediaQuery.of(context).size.width *
+                //     0.25, // Set the height if needed
+              ),
+            ),
+          ),
+          Spacer(),
+          Center(
             child: Text(
-              'Login KMS',
+              'Login',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: Text(
+              'Knowledge Management System',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: Text(
+              'Fakultas Ilmu Komputer',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           Spacer(),
           SizedBox(
             height: 10,
           ),
-          Text('NIM/NIDN'),
+          Text('Email'),
           TextField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'NIM/NIDN',
+              hintText: 'Email',
             ),
           ),
           SizedBox(

@@ -9,6 +9,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   // Buat variabel-variabel state di sini
   String selectedOptionJurusan = 'Teknik Informatika';
+  String selectedOptionUser = 'Mahasiswa';
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,47 @@ class _RegisterState extends State<Register> {
           ),
           SizedBox(
             height: 30,
+          ),
+          Row(
+            children: [
+              Text('Daftar Sebagai'),
+              Text(
+                '*', // Add your mandatory icon (e.g., an asterisk)
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              )
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.0,
+                style: BorderStyle.solid,
+              ),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            child: DropdownButton<String>(
+              value: selectedOptionUser,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedOptionUser = newValue!;
+                });
+              },
+              items: ['Mahasiswa', 'Dosen', 'Pengurus Lab'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              isExpanded: true,
+              underline: Container(),
+            ),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Row(
             children: [

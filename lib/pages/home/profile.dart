@@ -110,6 +110,7 @@ class Profile extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Insert the code you want to run when the button is pressed
+                    Navigator.pop(context);
                   },
                   child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 15),
