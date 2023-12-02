@@ -8,9 +8,113 @@ class CreateKnowledge extends StatefulWidget {
 class _CreateKnowledgeState extends State<CreateKnowledge> {
   // Add your state variables here
   String selectedOptionMatkul = 'Pemrograman Web';
+  String selectedOptionKategoriInformasi = 'Perkuliahan';
+  String selectedOptionKategoriHelpdesk = 'Software';
+  String selectedOptionCategory = 'Project Base';
 
   @override
   Widget build(BuildContext context) {
+    Widget selectedWidgetKategori;
+    if (selectedOptionCategory == 'Project Base' ||
+        selectedOptionCategory == 'Modul Kuliah') {
+      selectedWidgetKategori = Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: DropdownButton<String>(
+          value: selectedOptionMatkul,
+          onChanged: (newValue) {
+            setState(() {
+              selectedOptionMatkul = newValue!;
+            });
+          },
+          items: [
+            'Pemrograman Web',
+            'Algoritma',
+            'Pemrograman Mobile',
+            'Pemrograman Berorientasi Objek'
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          isExpanded: true,
+          underline: Container(),
+        ),
+      );
+    } else if (selectedOptionCategory == 'Informasi') {
+      selectedWidgetKategori = Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: DropdownButton<String>(
+          value: selectedOptionKategoriInformasi,
+          onChanged: (newValue) {
+            setState(() {
+              selectedOptionKategoriInformasi = newValue!;
+            });
+          },
+          items: [
+            'Perkuliahan',
+            'Lab',
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          isExpanded: true,
+          underline: Container(),
+        ),
+      );
+    } else if (selectedOptionCategory == 'Helpdesk') {
+      selectedWidgetKategori = Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: DropdownButton<String>(
+          value: selectedOptionKategoriHelpdesk,
+          onChanged: (newValue) {
+            setState(() {
+              selectedOptionKategoriHelpdesk = newValue!;
+            });
+          },
+          items: [
+            'Software',
+            'Koneksi Internet',
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          isExpanded: true,
+          underline: Container(),
+        ),
+      );
+    } else {
+      selectedWidgetKategori = SizedBox();
+    }
+
     return ListView(
       padding: EdgeInsets.all(15),
       children: [
@@ -23,6 +127,48 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         ),
         SizedBox(
           height: 20,
+        ),
+        Row(
+          children: [
+            Text('Jenis Knowledge'),
+            Text(
+              '*', // Add your mandatory icon (e.g., an asterisk)
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            )
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1.0,
+              style: BorderStyle.solid,
+            ),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: DropdownButton<String>(
+            value: selectedOptionCategory,
+            onChanged: (newValue) {
+              setState(() {
+                selectedOptionCategory = newValue!;
+              });
+            },
+            items: ['Project Base', 'Modul Kuliah', 'Informasi', 'Helpdesk']
+                .map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            isExpanded: true,
+            underline: Container(),
+          ),
+        ),
+        SizedBox(
+          height: 10,
         ),
         //JUDUL
         Row(
@@ -48,7 +194,10 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         //MATA KULIAH
         Row(
           children: [
-            Text('Mata kuliah'),
+            (selectedOptionCategory == 'Project Base' ||
+                    selectedOptionCategory == 'Modul Kuliah')
+                ? Text('Mata kuliah')
+                : Text('Kategori'),
             Text(
               '*', // Add your mandatory icon (e.g., an asterisk)
               style: TextStyle(
@@ -57,38 +206,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
             )
           ],
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-              width: 1.0,
-              style: BorderStyle.solid,
-            ),
-            borderRadius: BorderRadius.circular(4.0),
-          ),
-          child: DropdownButton<String>(
-            value: selectedOptionMatkul,
-            onChanged: (newValue) {
-              setState(() {
-                selectedOptionMatkul = newValue!;
-              });
-            },
-            items: [
-              'Pemrograman Web',
-              'Algoritma',
-              'Pemrograman Mobile',
-              'Pemrograman Berorientasi Objek'
-            ].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            isExpanded: true,
-            underline: Container(),
-          ),
-        ),
+        selectedWidgetKategori,
         SizedBox(
           height: 10,
         ),
