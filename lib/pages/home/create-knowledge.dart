@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/create-knowledge-service.dart';
 
 class CreateKnowledge extends StatefulWidget {
   @override
@@ -7,10 +8,15 @@ class CreateKnowledge extends StatefulWidget {
 
 class _CreateKnowledgeState extends State<CreateKnowledge> {
   // Add your state variables here
+  TextEditingController judulEditingController = TextEditingController();
+  TextEditingController penjelasanEditingController = TextEditingController();
+
   String selectedOptionMatkul = 'Pemrograman Web';
   String selectedOptionKategoriInformasi = 'Perkuliahan';
   String selectedOptionKategoriHelpdesk = 'Software';
   String selectedOptionCategory = 'Project Base';
+
+  String matkul_atau_kategori = '';
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +189,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           ],
         ),
         TextField(
+          controller: judulEditingController,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             hintText: 'Judul Knowledge',
@@ -247,6 +254,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           ],
         ),
         TextField(
+          controller: penjelasanEditingController,
           maxLines: 7,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -284,7 +292,35 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
             onPressed: () {
-              // Insert the code you want to run when the button is pressed
+              if (selectedOptionCategory == 'Project Base') {
+                matkul_atau_kategori = selectedOptionMatkul;
+              } else if (selectedOptionCategory == 'Modul Kuliah') {
+                matkul_atau_kategori = selectedOptionMatkul;
+              } else if (selectedOptionCategory == 'Informasi') {
+                matkul_atau_kategori = selectedOptionKategoriInformasi;
+              } else {
+                matkul_atau_kategori = selectedOptionKategoriHelpdesk;
+              }
+              Future<String> req_message = createKnowledge(
+                  status: "publish",
+                  type: selectedOptionCategory,
+                  title: judulEditingController.text,
+                  category: matkul_atau_kategori,
+                  image_cover: "ini gambar",
+                  penjelasan: penjelasanEditingController.text,
+                  attachment_file: "ini attachment file");
+              req_message.then((value) {
+                String message = value;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                    // action: SnackBarAction(
+                    //   label: 'Undo',
+                    //   onPressed: () {},
+                    // ),
+                  ),
+                );
+              });
             },
             child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
