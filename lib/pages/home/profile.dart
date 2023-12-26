@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
+  String statusUser = 'Mahasiswa';
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -43,7 +45,7 @@ class Profile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Mahasiswa',
+                  statusUser,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -59,21 +61,43 @@ class Profile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10),
-              Text('NIM/NIDN'),
-              SizedBox(height: 10),
-              Text(
-                '1234567890',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10),
-              Divider(
-                height: 20, // Adjust the height of the divider
-                color: Colors.grey, // Change the color of the divider
-              ),
+              (statusUser == 'Mahasiswa' || statusUser == 'Dosen')
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        Text('Jurusan'),
+                        SizedBox(height: 10),
+                        Text(
+                          'Teknik Informatika',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Divider(
+                          height: 20, // Adjust the height of the divider
+                          color: Colors.grey, // Change the color of the divider
+                        ),
+                        SizedBox(height: 10),
+                        Text('NIM/NIDN'),
+                        SizedBox(height: 10),
+                        Text(
+                          '1234567890',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Divider(
+                          height: 20, // Adjust the height of the divider
+                          color: Colors.grey, // Change the color of the divider
+                        ),
+                      ],
+                    )
+                  : SizedBox(),
               SizedBox(height: 10),
               Text('Email'),
               SizedBox(height: 10),
