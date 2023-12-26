@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1094431091928",
+    "project_id": "kms-esaunggul",
+    "storage_bucket": "kms-esaunggul.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094431091928:android:507438eb5d92ebfa47fbad",
+        "android_client_info": {
+          "package_name": "com.example.kms_esaunggul"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVdqjZnrM5WwqgtCBpILfiIGHdIUOjxcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
