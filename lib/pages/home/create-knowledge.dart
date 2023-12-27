@@ -24,8 +24,9 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
 
   bool isJudulMandatoryFieldFilled = true;
   bool isPenjelasanMandatoryFieldFilled = true;
+  bool any_image = false;
 
-  String default_image = 'assets/images/contoh card.png';
+  String image_cover = '';
   File? _selectedImage;
   final picker = ImagePicker();
 
@@ -34,8 +35,11 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
 
     setState(() {
       if (pickedFile != null) {
+        any_image = true;
+        print('ada gambar');
         _selectedImage = File(pickedFile.path);
       } else {
+        any_image = false;
         print('No image selected.');
       }
     });
@@ -55,7 +59,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
             await uploadTask.snapshot.ref.getDownloadURL();
 
         print('Image uploaded. Download URL: $downloadURL');
-        return downloadURL;
+        return downloadURL.toString();
       } catch (error) {
         print('Error uploading image: $error');
         return '';
@@ -400,14 +404,19 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
               //Cek field judul kosong atau tidak
               if (judulEditingController.text.isNotEmpty &&
                   penjelasanEditingController.text.isNotEmpty) {
-                final String? imageDownloadUrl = await _uploadImage();
-                print(imageDownloadUrl);
+                if (any_image == true) {
+                  final String? imageDownloadUrl = await _uploadImage();
+                  print(imageDownloadUrl);
+                  image_cover = imageDownloadUrl.toString();
+                } else {
+                  image_cover = '';
+                }
                 Future<String> req_message = createKnowledge(
                     status: "publish",
                     type: selectedOptionCategory,
                     title: judulEditingController.text,
                     category: matkul_atau_kategori,
-                    image_cover: imageDownloadUrl.toString(),
+                    image_cover: image_cover,
                     penjelasan: penjelasanEditingController.text,
                     attachment_file: "ini attachment file");
                 req_message.then((value) {

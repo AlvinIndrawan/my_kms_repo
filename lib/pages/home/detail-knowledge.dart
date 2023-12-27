@@ -51,26 +51,32 @@ class DetailKnowledge extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Image.network(
-            image_cover,
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width,
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) {
-                return child;
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            (loadingProgress.expectedTotalBytes ?? 1)
-                        : null,
-                  ),
-                );
-              }
-            },
-          ),
+          (image_cover == '')
+              ? Image.asset(
+                  'assets/images/contoh card.png',
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width,
+                )
+              : Image.network(
+                  image_cover,
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  (loadingProgress.expectedTotalBytes ?? 1)
+                              : null,
+                        ),
+                      );
+                    }
+                  },
+                ),
           SizedBox(
             height: 10,
           ),

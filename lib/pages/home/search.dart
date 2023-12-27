@@ -220,27 +220,34 @@ class CustomCard extends StatelessWidget {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: Image.network(
-                image_cover,
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width,
-                height: 180,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                (loadingProgress.expectedTotalBytes ?? 1)
-                            : null,
-                      ),
-                    );
-                  }
-                },
-              ),
+              child: (image_cover == '')
+                  ? Image.asset(
+                      'assets/images/contoh card.png',
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width,
+                      height: 180,
+                    )
+                  : Image.network(
+                      image_cover,
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width,
+                      height: 180,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      (loadingProgress.expectedTotalBytes ?? 1)
+                                  : null,
+                            ),
+                          );
+                        }
+                      },
+                    ),
             ),
             Padding(
               padding: EdgeInsets.all(15),
