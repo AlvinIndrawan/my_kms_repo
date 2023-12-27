@@ -129,7 +129,7 @@ class _SearchState extends State<Search> {
                               type: knowledge['type'],
                               category: knowledge['category'],
                               author: 'Alvin Indrawan',
-                              image_cover: 'assets/images/contoh card.png',
+                              image_cover: knowledge['image cover'],
                               penjelasan: knowledge['penjelasan'],
                               attachment_file: knowledge['attachment file'],
                             ))
@@ -220,11 +220,26 @@ class CustomCard extends StatelessWidget {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: Image.asset(
+              child: Image.network(
                 image_cover,
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width,
                 height: 180,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                (loadingProgress.expectedTotalBytes ?? 1)
+                            : null,
+                      ),
+                    );
+                  }
+                },
               ),
             ),
             Padding(

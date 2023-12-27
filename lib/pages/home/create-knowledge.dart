@@ -25,6 +25,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
   bool isJudulMandatoryFieldFilled = true;
   bool isPenjelasanMandatoryFieldFilled = true;
 
+  String default_image = 'assets/images/contoh card.png';
   File? _selectedImage;
   final picker = ImagePicker();
 
@@ -198,7 +199,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         // ),
         // Center(
         //   child: Image.network(
-        //     'https://firebasestorage.googleapis.com/v0/b/kms-esaunggul.appspot.com/o/knowledge_images%2F1703688198850.png?alt=media&token=348e434d-8d28-4dc1-a767-41749b65b348',
+        //     'https://firebasestorage.googleapis.com/v0/b/kms-esaunggul.appspot.com/o/knowledge_images%2F1703690561693.png?alt=media&token=f377b92d-5194-4855-9865-98cd9cc9f2a3',
         //     loadingBuilder: (BuildContext context, Widget child,
         //         ImageChunkEvent? loadingProgress) {
         //       if (loadingProgress == null) {

@@ -51,10 +51,25 @@ class DetailKnowledge extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Image.asset(
+          Image.network(
             image_cover,
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width,
+            loadingBuilder: (BuildContext context, Widget child,
+                ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            (loadingProgress.expectedTotalBytes ?? 1)
+                        : null,
+                  ),
+                );
+              }
+            },
           ),
           SizedBox(
             height: 10,
