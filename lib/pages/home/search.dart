@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../services/search-knowledge-service.dart';
 import 'detail-knowledge.dart';
 
 class Search extends StatefulWidget {
@@ -8,6 +10,14 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   // Add your state variables here
+
+  TextEditingController searchEditingController = TextEditingController();
+  // Stream<QuerySnapshot<Map<String, dynamic>>>? _searchResults;
+  Stream<QuerySnapshot<Map<String, dynamic>>>? _searchResults;
+  var data;
+  int jumlah_data = 0;
+  bool already_search = false;
+
   String selectedOptionCategory = 'Project Base';
   String selectedOptionMatkul = 'Semua';
 
@@ -17,6 +27,7 @@ class _SearchState extends State<Search> {
       padding: EdgeInsets.all(15),
       children: [
         TextField(
+          controller: searchEditingController,
           decoration: InputDecoration(
             suffixIcon: Icon(Icons.search),
             border: OutlineInputBorder(
@@ -24,6 +35,17 @@ class _SearchState extends State<Search> {
             ),
             hintText: 'Cari Knowledge..',
           ),
+          onEditingComplete: () async {
+            if (searchEditingController.text.isEmpty) {
+              already_search = false;
+              setState(() {});
+            } else {
+              data = await getAllDataFromFirestore();
+              jumlah_data = data.length;
+              already_search = true;
+              setState(() {});
+            }
+          },
         ),
         SizedBox(
           height: 15,
@@ -97,16 +119,79 @@ class _SearchState extends State<Search> {
         SizedBox(
           height: 25,
         ),
-        CustomCard(),
-        CustomCard(),
+        (already_search)
+            ? (jumlah_data > 0)
+                ? Column(
+                    children: data
+                        .map<Widget>((knowledge) => CustomCard(
+                              title: knowledge['title'],
+                              type: knowledge['type'],
+                              category: knowledge['category'],
+                              author: 'Alvin Indrawan',
+                              image_cover: 'assets/images/contoh card.png',
+                            ))
+                        .toList(),
+                  )
+                : Padding(
+                    padding: EdgeInsets.only(top: 100),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/not found.png',
+                        width: 180,
+                      ),
+                    ),
+                  )
+            : Padding(
+                padding: EdgeInsets.only(top: 100),
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/search.png',
+                    width: 180,
+                  ),
+                ),
+              ),
       ],
     );
+  }
+
+  Future<List<Object>> getAllDataFromFirestore() async {
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('knowledge');
+
+    try {
+      QuerySnapshot<Object?> querySnapshot = await collectionRef
+          .where('title', isGreaterThanOrEqualTo: searchEditingController.text)
+          .where('title',
+              isLessThanOrEqualTo: searchEditingController.text + '\uf8ff')
+          .get();
+
+      // Handle the data and convert it to a list of maps
+      List<Object> data = querySnapshot.docs.map((doc) => doc.data()!).toList();
+      return data;
+    } catch (error) {
+      print('Error fetching data: $error');
+      // Optionally, rethrow the error for higher-level error handling
+      rethrow;
+    }
   }
 }
 
 //CUSTOM WIDGET
 
 class CustomCard extends StatelessWidget {
+  final String title;
+  final String type;
+  final String category;
+  final String author;
+  final String image_cover;
+
+  CustomCard(
+      {required this.title,
+      required this.type,
+      required this.category,
+      required this.author,
+      required this.image_cover});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -141,7 +226,7 @@ class CustomCard extends StatelessWidget {
                 topRight: Radius.circular(15),
               ),
               child: Image.asset(
-                'assets/images/contoh card.png',
+                image_cover,
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width,
                 height: 180,
@@ -153,7 +238,7 @@ class CustomCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Belajar Framework Bootstrap Untuk Pemrograman Web',
+                    title,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -165,13 +250,13 @@ class CustomCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'Kategori : ',
+                        'Jenis Knowledge : ',
                         style: TextStyle(
                           fontSize: 15,
                         ),
                       ),
                       Text(
-                        'Project Base',
+                        type,
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -180,14 +265,21 @@ class CustomCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
+                      (type == 'Project Base' || type == 'Modul Kuliah')
+                          ? Text(
+                              'Mata Kuliah : ',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            )
+                          : Text(
+                              'Kategori : ',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
                       Text(
-                        'Mata Kuliah : ',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text(
-                        'Pemrograman Web',
+                        category,
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -203,7 +295,7 @@ class CustomCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Alvin Indrawan',
+                        author,
                         style: TextStyle(
                           fontSize: 15,
                         ),

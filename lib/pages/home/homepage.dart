@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'detail-knowledge.dart';
 import 'home.dart';
 import 'search.dart';
 import 'create-knowledge.dart';

@@ -18,6 +18,9 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
 
   String matkul_atau_kategori = '';
 
+  bool isJudulMandatoryFieldFilled = true;
+  bool isPenjelasanMandatoryFieldFilled = true;
+
   @override
   Widget build(BuildContext context) {
     Widget selectedWidgetKategori;
@@ -193,6 +196,8 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             hintText: 'Judul Knowledge',
+            errorText:
+                isJudulMandatoryFieldFilled ? null : 'Field tidak boleh kosong',
           ),
         ),
         SizedBox(
@@ -259,6 +264,9 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             hintText: 'Penjelasan isi knowledge',
+            errorText: isPenjelasanMandatoryFieldFilled
+                ? null
+                : 'Field tidak boleh kosong',
           ),
         ),
         SizedBox(
@@ -292,6 +300,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
             onPressed: () {
+              //Cek nilai category atau matkul
               if (selectedOptionCategory == 'Project Base') {
                 matkul_atau_kategori = selectedOptionMatkul;
               } else if (selectedOptionCategory == 'Modul Kuliah') {
@@ -301,26 +310,51 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
               } else {
                 matkul_atau_kategori = selectedOptionKategoriHelpdesk;
               }
-              Future<String> req_message = createKnowledge(
-                  status: "publish",
-                  type: selectedOptionCategory,
-                  title: judulEditingController.text,
-                  category: matkul_atau_kategori,
-                  image_cover: "ini gambar",
-                  penjelasan: penjelasanEditingController.text,
-                  attachment_file: "ini attachment file");
-              req_message.then((value) {
-                String message = value;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                    // action: SnackBarAction(
-                    //   label: 'Undo',
-                    //   onPressed: () {},
-                    // ),
-                  ),
-                );
-              });
+              //Cek field judul kosong atau tidak
+              if (judulEditingController.text.isNotEmpty &&
+                  penjelasanEditingController.text.isNotEmpty) {
+                Future<String> req_message = createKnowledge(
+                    status: "publish",
+                    type: selectedOptionCategory,
+                    title: judulEditingController.text,
+                    category: matkul_atau_kategori,
+                    image_cover: "ini gambar",
+                    penjelasan: penjelasanEditingController.text,
+                    attachment_file: "ini attachment file");
+                req_message.then((value) {
+                  String message = value;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                      // action: SnackBarAction(
+                      //   label: 'Undo',
+                      //   onPressed: () {},
+                      // ),
+                    ),
+                  );
+                });
+                setState(() {
+                  isJudulMandatoryFieldFilled = true;
+                  isPenjelasanMandatoryFieldFilled = true;
+                });
+              } else if (judulEditingController.text.isEmpty &&
+                  penjelasanEditingController.text.isNotEmpty) {
+                setState(() {
+                  isJudulMandatoryFieldFilled = false;
+                  isPenjelasanMandatoryFieldFilled = true;
+                });
+              } else if (judulEditingController.text.isNotEmpty &&
+                  penjelasanEditingController.text.isEmpty) {
+                setState(() {
+                  isJudulMandatoryFieldFilled = true;
+                  isPenjelasanMandatoryFieldFilled = false;
+                });
+              } else {
+                setState(() {
+                  isJudulMandatoryFieldFilled = false;
+                  isPenjelasanMandatoryFieldFilled = false;
+                });
+              }
             },
             child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
