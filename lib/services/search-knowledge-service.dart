@@ -1,29 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Stream<QuerySnapshot<Object?>> searchKnowledge({required String keyword}) {
-  // Get a reference to the Firestore instance
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+Future<List<Object>> getAllDataFromFirestore(String keyword) async {
+  CollectionReference collectionRef =
+      FirebaseFirestore.instance.collection('knowledge');
 
-  // Collection reference
-  CollectionReference knowledge = firestore.collection('knowledge');
+  try {
+    QuerySnapshot<Object?> querySnapshot = await collectionRef
+        .where('title', isGreaterThanOrEqualTo: keyword)
+        .where('title', isLessThanOrEqualTo: keyword + '\uf8ff')
+        .get();
 
-  // Use where() to perform the similar search based on a field (e.g., 'title')
-  return knowledge
-      .where('title', isGreaterThanOrEqualTo: keyword)
-      .where('title', isLessThanOrEqualTo: keyword + '\uf8ff')
-      .snapshots();
+    // Handle the data and convert it to a list of maps
+    List<Object> data = querySnapshot.docs.map((doc) => doc.data()!).toList();
+    return data;
+  } catch (error) {
+    print('Error fetching data: $error');
+    // Optionally, rethrow the error for higher-level error handling
+    rethrow;
+  }
 }
-
-// Future<List<QueryDocumentSnapshot<Object?>>> getDataFromFirestore() async {
-//   // Get a reference to the Firestore instance
-//   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-//   // Reference to a specific collection (replace 'my_collection' with your collection name)
-//   CollectionReference knowledge = firestore.collection('knowledge');
-
-//   // Get documents from the collection
-//   QuerySnapshot<Object?> querySnapshot = await knowledge.get();
-
-//   // Return the list of documents
-//   return querySnapshot.docs;
-// }

@@ -40,7 +40,8 @@ class _SearchState extends State<Search> {
               already_search = false;
               setState(() {});
             } else {
-              data = await getAllDataFromFirestore();
+              data =
+                  await getAllDataFromFirestore(searchEditingController.text);
               jumlah_data = data.length;
               already_search = true;
               setState(() {});
@@ -152,27 +153,6 @@ class _SearchState extends State<Search> {
               ),
       ],
     );
-  }
-
-  Future<List<Object>> getAllDataFromFirestore() async {
-    CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('knowledge');
-
-    try {
-      QuerySnapshot<Object?> querySnapshot = await collectionRef
-          .where('title', isGreaterThanOrEqualTo: searchEditingController.text)
-          .where('title',
-              isLessThanOrEqualTo: searchEditingController.text + '\uf8ff')
-          .get();
-
-      // Handle the data and convert it to a list of maps
-      List<Object> data = querySnapshot.docs.map((doc) => doc.data()!).toList();
-      return data;
-    } catch (error) {
-      print('Error fetching data: $error');
-      // Optionally, rethrow the error for higher-level error handling
-      rethrow;
-    }
   }
 }
 
