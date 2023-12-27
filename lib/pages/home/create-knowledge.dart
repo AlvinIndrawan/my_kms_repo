@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../services/create-knowledge-service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateKnowledge extends StatefulWidget {
   @override
@@ -20,6 +24,44 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
 
   bool isJudulMandatoryFieldFilled = true;
   bool isPenjelasanMandatoryFieldFilled = true;
+
+  File? _selectedImage;
+  final picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _selectedImage = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<String> _uploadImage() async {
+    if (_selectedImage != null) {
+      try {
+        String imageName =
+            'knowledge_images/${DateTime.now().millisecondsSinceEpoch}.png';
+
+        UploadTask uploadTask =
+            FirebaseStorage.instance.ref(imageName).putFile(_selectedImage!);
+
+        await uploadTask.whenComplete(() => print('Upload complete'));
+        final String downloadURL =
+            await uploadTask.snapshot.ref.getDownloadURL();
+
+        print('Image uploaded. Download URL: $downloadURL');
+        return downloadURL;
+      } catch (error) {
+        print('Error uploading image: $error');
+        return '';
+      }
+    }
+    return ''; // No image selected
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +179,43 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         SizedBox(
           height: 20,
         ),
+        // Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     _selectedImage != null
+        //         ? Image.file(_selectedImage!)
+        //         : Text('No image selected'),
+        //     SizedBox(height: 20),
+        //     ElevatedButton(
+        //       onPressed: _pickImage,
+        //       child: Text('Pick Image'),
+        //     ),
+        //     ElevatedButton(
+        //       onPressed: _uploadImage,
+        //       child: Text('Upload Image'),
+        //     ),
+        //   ],
+        // ),
+        // Center(
+        //   child: Image.network(
+        //     'https://firebasestorage.googleapis.com/v0/b/kms-esaunggul.appspot.com/o/knowledge_images%2F1703688198850.png?alt=media&token=348e434d-8d28-4dc1-a767-41749b65b348',
+        //     loadingBuilder: (BuildContext context, Widget child,
+        //         ImageChunkEvent? loadingProgress) {
+        //       if (loadingProgress == null) {
+        //         return child;
+        //       } else {
+        //         return Center(
+        //           child: CircularProgressIndicator(
+        //             value: loadingProgress.expectedTotalBytes != null
+        //                 ? loadingProgress.cumulativeBytesLoaded /
+        //                     (loadingProgress.expectedTotalBytes ?? 1)
+        //                 : null,
+        //           ),
+        //         );
+        //       }
+        //     },
+        //   ),
+        // ),
         Row(
           children: [
             Text('Jenis Knowledge'),
@@ -224,23 +303,30 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         ),
         //UPLOAD GAMBAR COVER
         Text('Gambar cover'),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: TextButton(
-            onPressed: () {
-              // Insert the code you want to run when the button is pressed
-            },
-            child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: Text(
-                  'Upload Gambar',
-                  style: TextStyle(color: Colors.black),
-                )),
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xffdedede)),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _selectedImage != null
+                ? Image.file(_selectedImage!)
+                : SizedBox(height: 0),
+            SizedBox(height: 20),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: TextButton(
+                onPressed: _pickImage,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Text(
+                      'Upload Gambar',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Color(0xffdedede)),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
 
         SizedBox(
@@ -299,7 +385,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               //Cek nilai category atau matkul
               if (selectedOptionCategory == 'Project Base') {
                 matkul_atau_kategori = selectedOptionMatkul;
@@ -313,12 +399,14 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
               //Cek field judul kosong atau tidak
               if (judulEditingController.text.isNotEmpty &&
                   penjelasanEditingController.text.isNotEmpty) {
+                final String? imageDownloadUrl = await _uploadImage();
+                print(imageDownloadUrl);
                 Future<String> req_message = createKnowledge(
                     status: "publish",
                     type: selectedOptionCategory,
                     title: judulEditingController.text,
                     category: matkul_atau_kategori,
-                    image_cover: "ini gambar",
+                    image_cover: imageDownloadUrl.toString(),
                     penjelasan: penjelasanEditingController.text,
                     attachment_file: "ini attachment file");
                 req_message.then((value) {
@@ -326,10 +414,6 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(message),
-                      // action: SnackBarAction(
-                      //   label: 'Undo',
-                      //   onPressed: () {},
-                      // ),
                     ),
                   );
                 });
