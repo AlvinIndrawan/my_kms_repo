@@ -130,6 +130,8 @@ class _SearchState extends State<Search> {
                               category: knowledge['category'],
                               author: 'Alvin Indrawan',
                               image_cover: 'assets/images/contoh card.png',
+                              penjelasan: knowledge['penjelasan'],
+                              attachment_file: knowledge['attachment file'],
                             ))
                         .toList(),
                   )
@@ -164,13 +166,17 @@ class CustomCard extends StatelessWidget {
   final String category;
   final String author;
   final String image_cover;
+  final String penjelasan;
+  final String attachment_file;
 
   CustomCard(
       {required this.title,
       required this.type,
       required this.category,
       required this.author,
-      required this.image_cover});
+      required this.image_cover,
+      required this.penjelasan,
+      required this.attachment_file});
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +185,16 @@ class CustomCard extends StatelessWidget {
         // Handle the tap action here
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetailKnowledge()),
+          MaterialPageRoute(
+              builder: (context) => DetailKnowledge(
+                    title: title,
+                    type: type,
+                    category: category,
+                    author: author,
+                    image_cover: image_cover,
+                    penjelasan: penjelasan,
+                    attachment_file: attachment_file,
+                  )),
         );
       },
       child: Container(

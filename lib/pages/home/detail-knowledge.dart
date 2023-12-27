@@ -1,6 +1,23 @@
 import 'package:flutter/material.dart';
 
 class DetailKnowledge extends StatelessWidget {
+  final String title;
+  final String type;
+  final String category;
+  final String author;
+  final String image_cover;
+  final String penjelasan;
+  final String attachment_file;
+
+  DetailKnowledge(
+      {required this.title,
+      required this.type,
+      required this.category,
+      required this.author,
+      required this.image_cover,
+      required this.penjelasan,
+      required this.attachment_file});
+
   String textdummy =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tortor id aliquet lectus proin nibh nisl condimentum id. Iaculis nunc sed augue lacus viverra vitae congue eu. Augue ut lectus arcu bibendum. Erat pellentesque adipiscing commodo elit at imperdiet dui accumsan sit. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Sed nisi lacus sed viverra tellus in hac. Ipsum suspendisse ultrices gravida dictum. Et netus et malesuada fames ac turpis egestas integer eget. \n\n A diam sollicitudin tempor id eu. Sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Vitae ultricies leo integer malesuada nunc vel risus commodo. Feugiat nibh sed pulvinar proin. Nunc vel risus commodo viverra. Platea dictumst quisque sagittis purus sit amet volutpat. Tortor vitae purus faucibus ornare suspendisse sed nisi. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus. Ipsum nunc aliquet bibendum enim. Vel risus commodo viverra maecenas. Elit ullamcorper dignissim cras tincidunt. Aliquam sem et tortor consequat id porta nibh venenatis. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Leo a diam sollicitudin tempor. Nullam ac tortor vitae purus faucibus ornare suspendisse sed. Pulvinar neque laoreet suspendisse interdum consectetur libero id faucibus.';
 
@@ -27,7 +44,7 @@ class DetailKnowledge extends StatelessWidget {
         padding: EdgeInsets.all(15),
         children: [
           Text(
-            'Belajar Framework Bootstrap Untuk Pemrograman Web',
+            title,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -35,7 +52,7 @@ class DetailKnowledge extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Image.asset(
-            'assets/images/contoh card.png',
+            image_cover,
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width,
           ),
@@ -45,13 +62,13 @@ class DetailKnowledge extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Kategori : ',
+                'Jenis Knowledge : ',
                 style: TextStyle(
                   fontSize: 15,
                 ),
               ),
               Text(
-                'Project Base',
+                type,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -60,14 +77,21 @@ class DetailKnowledge extends StatelessWidget {
           ),
           Row(
             children: [
+              (type == 'Project Base' || type == 'Modul Kuliah')
+                  ? Text(
+                      'Mata Kuliah : ',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    )
+                  : Text(
+                      'Kategori : ',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
               Text(
-                'Mata Kuliah : ',
-                style: TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-              Text(
-                'Pemrograman Web',
+                category,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -83,7 +107,7 @@ class DetailKnowledge extends StatelessWidget {
                 ),
               ),
               Text(
-                'Alvin Indrawan',
+                author,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -94,7 +118,7 @@ class DetailKnowledge extends StatelessWidget {
             height: 30,
           ),
           Text(
-            textdummy,
+            penjelasan,
             textAlign: TextAlign.justify,
           ),
           SizedBox(
