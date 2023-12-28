@@ -23,8 +23,12 @@ class DetailKnowledge extends StatelessWidget {
       required this.attachment_file,
       required this.attachment_file_name});
 
-  String tes_url =
-      'https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg';
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
+  }
 
   Future<void> downloadFile(String url, String fileName) async {
     final directory =
@@ -199,7 +203,9 @@ class DetailKnowledge extends StatelessWidget {
                             ),
                             SizedBox(width: 10),
                             Text(
-                              attachment_file_name,
+                              truncateText(attachment_file_name, 30),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
