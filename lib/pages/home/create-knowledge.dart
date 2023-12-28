@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../services/create-knowledge-service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 class CreateKnowledge extends StatefulWidget {
   @override
@@ -25,10 +26,16 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
   bool isJudulMandatoryFieldFilled = true;
   bool isPenjelasanMandatoryFieldFilled = true;
   bool any_image = false;
+  bool any_file = false;
 
+  String attachment_file = '';
   String image_cover = '';
   File? _selectedImage;
+  File? _selectedFile;
+  File? _selectedFileName;
   final picker = ImagePicker();
+
+  bool isLoading = false;
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -66,6 +73,51 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
       }
     }
     return ''; // No image selected
+  }
+
+  Future<void> _pickFile() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    setState(() {
+      if (result != null && result.files.isNotEmpty) {
+        any_file = true;
+        int totalSize = result.files
+            .fold(0, (int acc, PlatformFile file) => acc + file.size!);
+        if (totalSize > 5 * 1024 * 1024) {
+          print('Total file size exceeds 5 MB.');
+          _selectedFile = null;
+        } else {
+          _selectedFile = File(result.files.single.path!);
+          _selectedFileName = File(result.files.single.name);
+        }
+      } else {
+        any_file = false;
+        print('No file selected.');
+      }
+    });
+  }
+
+  Future<String?> _uploadFile() async {
+    if (_selectedFile != null) {
+      try {
+        String fileName =
+            'knowledge_files/${DateTime.now().millisecondsSinceEpoch}_${_selectedFile!.uri.pathSegments.last}';
+
+        UploadTask uploadTask =
+            FirebaseStorage.instance.ref(fileName).putFile(_selectedFile!);
+
+        TaskSnapshot taskSnapshot =
+            await uploadTask.whenComplete(() => print('Upload complete'));
+        String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+        print('File uploaded. Download URL: $downloadURL');
+        return downloadURL.toString();
+      } catch (error) {
+        print('Error uploading file: $error');
+        return '';
+      }
+    }
   }
 
   @override
@@ -184,43 +236,6 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         SizedBox(
           height: 20,
         ),
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     _selectedImage != null
-        //         ? Image.file(_selectedImage!)
-        //         : Text('No image selected'),
-        //     SizedBox(height: 20),
-        //     ElevatedButton(
-        //       onPressed: _pickImage,
-        //       child: Text('Pick Image'),
-        //     ),
-        //     ElevatedButton(
-        //       onPressed: _uploadImage,
-        //       child: Text('Upload Image'),
-        //     ),
-        //   ],
-        // ),
-        // Center(
-        //   child: Image.network(
-        //     'https://firebasestorage.googleapis.com/v0/b/kms-esaunggul.appspot.com/o/knowledge_images%2F1703690561693.png?alt=media&token=f377b92d-5194-4855-9865-98cd9cc9f2a3',
-        //     loadingBuilder: (BuildContext context, Widget child,
-        //         ImageChunkEvent? loadingProgress) {
-        //       if (loadingProgress == null) {
-        //         return child;
-        //       } else {
-        //         return Center(
-        //           child: CircularProgressIndicator(
-        //             value: loadingProgress.expectedTotalBytes != null
-        //                 ? loadingProgress.cumulativeBytesLoaded /
-        //                     (loadingProgress.expectedTotalBytes ?? 1)
-        //                 : null,
-        //           ),
-        //         );
-        //       }
-        //     },
-        //   ),
-        // ),
         Row(
           children: [
             Text('Jenis Knowledge'),
@@ -365,12 +380,13 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         ),
         //UPLOAD ATTACHMENT FILE
         Text('Attachment File'),
+        _selectedFile != null
+            ? Text(_selectedFileName.toString())
+            : SizedBox(height: 0),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextButton(
-            onPressed: () {
-              // Insert the code you want to run when the button is pressed
-            },
+            onPressed: _pickFile,
             child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text(
@@ -387,101 +403,127 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           height: 40,
         ),
         //BUTTON CREATE & PUBLISH
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-            onPressed: () async {
-              //Cek nilai category atau matkul
-              if (selectedOptionCategory == 'Project Base') {
-                matkul_atau_kategori = selectedOptionMatkul;
-              } else if (selectedOptionCategory == 'Modul Kuliah') {
-                matkul_atau_kategori = selectedOptionMatkul;
-              } else if (selectedOptionCategory == 'Informasi') {
-                matkul_atau_kategori = selectedOptionKategoriInformasi;
-              } else {
-                matkul_atau_kategori = selectedOptionKategoriHelpdesk;
-              }
-              //Cek field judul kosong atau tidak
-              if (judulEditingController.text.isNotEmpty &&
-                  penjelasanEditingController.text.isNotEmpty) {
-                if (any_image == true) {
-                  final String? imageDownloadUrl = await _uploadImage();
-                  print(imageDownloadUrl);
-                  image_cover = imageDownloadUrl.toString();
-                } else {
-                  image_cover = '';
-                }
-                Future<String> req_message = createKnowledge(
-                    status: "publish",
-                    type: selectedOptionCategory,
-                    title: judulEditingController.text,
-                    category: matkul_atau_kategori,
-                    image_cover: image_cover,
-                    penjelasan: penjelasanEditingController.text,
-                    attachment_file: "ini attachment file");
-                req_message.then((value) {
-                  String message = value;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(message),
-                    ),
-                  );
-                });
-                setState(() {
-                  isJudulMandatoryFieldFilled = true;
-                  isPenjelasanMandatoryFieldFilled = true;
-                });
-              } else if (judulEditingController.text.isEmpty &&
-                  penjelasanEditingController.text.isNotEmpty) {
-                setState(() {
-                  isJudulMandatoryFieldFilled = false;
-                  isPenjelasanMandatoryFieldFilled = true;
-                });
-              } else if (judulEditingController.text.isNotEmpty &&
-                  penjelasanEditingController.text.isEmpty) {
-                setState(() {
-                  isJudulMandatoryFieldFilled = true;
-                  isPenjelasanMandatoryFieldFilled = false;
-                });
-              } else {
-                setState(() {
-                  isJudulMandatoryFieldFilled = false;
-                  isPenjelasanMandatoryFieldFilled = false;
-                });
-              }
-            },
-            child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: Text(
-                  'Create & Publish',
-                  style: TextStyle(color: Colors.white),
-                )),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-            ),
-          ),
-        ),
+        (isLoading)
+            ? Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.4,
+                ),
+                child: CircularProgressIndicator(),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    //Cek nilai category atau matkul
+                    if (selectedOptionCategory == 'Project Base') {
+                      matkul_atau_kategori = selectedOptionMatkul;
+                    } else if (selectedOptionCategory == 'Modul Kuliah') {
+                      matkul_atau_kategori = selectedOptionMatkul;
+                    } else if (selectedOptionCategory == 'Informasi') {
+                      matkul_atau_kategori = selectedOptionKategoriInformasi;
+                    } else {
+                      matkul_atau_kategori = selectedOptionKategoriHelpdesk;
+                    }
+                    //Cek field judul kosong atau tidak
+                    if (judulEditingController.text.isNotEmpty &&
+                        penjelasanEditingController.text.isNotEmpty) {
+                      if (any_image == true) {
+                        final String? imageDownloadUrl = await _uploadImage();
+                        print(imageDownloadUrl);
+                        image_cover = imageDownloadUrl.toString();
+                      } else {
+                        image_cover = '';
+                      }
+                      if (any_file == true) {
+                        final String? fileDownloadUrl = await _uploadFile();
+                        print(fileDownloadUrl);
+                        attachment_file = fileDownloadUrl.toString();
+                      } else {
+                        attachment_file = '';
+                      }
+
+                      Future<String> req_message = createKnowledge(
+                          status: "publish",
+                          type: selectedOptionCategory,
+                          title: judulEditingController.text,
+                          category: matkul_atau_kategori,
+                          image_cover: image_cover,
+                          penjelasan: penjelasanEditingController.text,
+                          attachment_file: attachment_file);
+                      req_message.then((value) {
+                        String message = value;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(message),
+                          ),
+                        );
+                      });
+                      setState(() {
+                        isJudulMandatoryFieldFilled = true;
+                        isPenjelasanMandatoryFieldFilled = true;
+                        isLoading = false;
+                      });
+                    } else if (judulEditingController.text.isEmpty &&
+                        penjelasanEditingController.text.isNotEmpty) {
+                      setState(() {
+                        isJudulMandatoryFieldFilled = false;
+                        isPenjelasanMandatoryFieldFilled = true;
+                        isLoading = false;
+                      });
+                    } else if (judulEditingController.text.isNotEmpty &&
+                        penjelasanEditingController.text.isEmpty) {
+                      setState(() {
+                        isJudulMandatoryFieldFilled = true;
+                        isPenjelasanMandatoryFieldFilled = false;
+                        isLoading = false;
+                      });
+                    } else {
+                      setState(() {
+                        isJudulMandatoryFieldFilled = false;
+                        isPenjelasanMandatoryFieldFilled = false;
+                        isLoading = false;
+                      });
+                    }
+                  },
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Text(
+                        'Create & Publish',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.black),
+                  ),
+                ),
+              ),
         SizedBox(
           height: 10,
         ),
         //BUTTON Simpan Draft
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: OutlinedButton(
-            onPressed: () {
-              // Insert the code you want to run when the button is pressed
-            },
-            child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: Text('Simpan Draft')),
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              side: MaterialStateProperty.all<BorderSide>(
-                BorderSide(width: 1.0, color: Colors.black),
+        (isLoading)
+            ? SizedBox()
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: OutlinedButton(
+                  onPressed: () {
+                    // Insert the code you want to run when the button is pressed
+                  },
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Text('Simpan Draft')),
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.black),
+                    side: MaterialStateProperty.all<BorderSide>(
+                      BorderSide(width: 1.0, color: Colors.black),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
       ],
     );
   }
