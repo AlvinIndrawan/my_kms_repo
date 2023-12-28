@@ -32,10 +32,15 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
   String image_cover = '';
   File? _selectedImage;
   File? _selectedFile;
-  File? _selectedFileName;
+  var _selectedFileName;
   final picker = ImagePicker();
 
   bool isLoading = false;
+
+  List<String> splitStringBySingleQuote(String inputString) {
+    List<String> separatedStrings = inputString.split("'");
+    return separatedStrings;
+  }
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -89,7 +94,9 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           _selectedFile = null;
         } else {
           _selectedFile = File(result.files.single.path!);
-          _selectedFileName = File(result.files.single.name);
+          List<String> separatedStrings = splitStringBySingleQuote(
+              File(result.files.single.name).toString());
+          _selectedFileName = separatedStrings[1];
         }
       } else {
         any_file = false;
@@ -452,7 +459,8 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                           category: matkul_atau_kategori,
                           image_cover: image_cover,
                           penjelasan: penjelasanEditingController.text,
-                          attachment_file: attachment_file);
+                          attachment_file: attachment_file,
+                          attachment_file_name: _selectedFileName.toString());
                       req_message.then((value) {
                         String message = value;
                         ScaffoldMessenger.of(context).showSnackBar(
