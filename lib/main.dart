@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'firebase_options.dart';
 import 'pages/register.dart';
 import 'pages/login.dart';
@@ -7,6 +8,7 @@ import 'pages/home/homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

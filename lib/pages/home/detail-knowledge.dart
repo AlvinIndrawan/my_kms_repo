@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DetailKnowledge extends StatelessWidget {
   final String title;
@@ -8,6 +11,7 @@ class DetailKnowledge extends StatelessWidget {
   final String image_cover;
   final String penjelasan;
   final String attachment_file;
+  final String attachment_file_name;
 
   DetailKnowledge(
       {required this.title,
@@ -16,10 +20,24 @@ class DetailKnowledge extends StatelessWidget {
       required this.author,
       required this.image_cover,
       required this.penjelasan,
-      required this.attachment_file});
+      required this.attachment_file,
+      required this.attachment_file_name});
 
-  String textdummy =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tortor id aliquet lectus proin nibh nisl condimentum id. Iaculis nunc sed augue lacus viverra vitae congue eu. Augue ut lectus arcu bibendum. Erat pellentesque adipiscing commodo elit at imperdiet dui accumsan sit. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Sed nisi lacus sed viverra tellus in hac. Ipsum suspendisse ultrices gravida dictum. Et netus et malesuada fames ac turpis egestas integer eget. \n\n A diam sollicitudin tempor id eu. Sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Vitae ultricies leo integer malesuada nunc vel risus commodo. Feugiat nibh sed pulvinar proin. Nunc vel risus commodo viverra. Platea dictumst quisque sagittis purus sit amet volutpat. Tortor vitae purus faucibus ornare suspendisse sed nisi. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus. Ipsum nunc aliquet bibendum enim. Vel risus commodo viverra maecenas. Elit ullamcorper dignissim cras tincidunt. Aliquam sem et tortor consequat id porta nibh venenatis. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Leo a diam sollicitudin tempor. Nullam ac tortor vitae purus faucibus ornare suspendisse sed. Pulvinar neque laoreet suspendisse interdum consectetur libero id faucibus.';
+  String tes_url =
+      'https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg';
+
+  Future<void> downloadFile(String url, String fileName) async {
+    final directory =
+        await getExternalStorageDirectory(); // Use getApplicationDocumentsDirectory() for internal storage
+
+    final taskId = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: directory!.path,
+      fileName: fileName,
+      showNotification: true,
+      openFileFromNotification: true,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,47 +163,59 @@ class DetailKnowledge extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          Text(
-            'Attachment File',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 5),
-          Container(
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: Color(0xffdedede),
-              border: Border.all(
-                color: Colors.grey,
-                width: 1.0,
-                style: BorderStyle.solid,
-              ),
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/images/icon file.png',
-                  height: 20,
+          (attachment_file == '' || attachment_file_name == '')
+              ? SizedBox()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Attachment File',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    InkWell(
+                      onTap: () {
+                        downloadFile(attachment_file, attachment_file_name);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Color(0xffdedede),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1.0,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/icon file.png',
+                              height: 20,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              attachment_file_name,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Spacer(),
+                            Icon(Icons.file_download, size: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                  ],
                 ),
-                SizedBox(width: 10),
-                Text(
-                  'Nama File.pdf',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Spacer(),
-                Icon(Icons.file_download, size: 20),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
           Text(
             'Comments',
             style: TextStyle(

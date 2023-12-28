@@ -32,7 +32,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
   String image_cover = '';
   File? _selectedImage;
   File? _selectedFile;
-  var _selectedFileName;
+  String _selectedFileName = '';
   final picker = ImagePicker();
 
   bool isLoading = false;
@@ -96,10 +96,11 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
           _selectedFile = File(result.files.single.path!);
           List<String> separatedStrings = splitStringBySingleQuote(
               File(result.files.single.name).toString());
-          _selectedFileName = separatedStrings[1];
+          _selectedFileName = separatedStrings[1].toString();
         }
       } else {
         any_file = false;
+        _selectedFileName = '';
         print('No file selected.');
       }
     });

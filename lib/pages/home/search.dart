@@ -132,6 +132,8 @@ class _SearchState extends State<Search> {
                               image_cover: knowledge['image cover'],
                               penjelasan: knowledge['penjelasan'],
                               attachment_file: knowledge['attachment file'],
+                              attachment_file_name:
+                                  knowledge['attachment file name'],
                             ))
                         .toList(),
                   )
@@ -168,6 +170,7 @@ class CustomCard extends StatelessWidget {
   final String image_cover;
   final String penjelasan;
   final String attachment_file;
+  final String attachment_file_name;
 
   CustomCard(
       {required this.title,
@@ -176,7 +179,8 @@ class CustomCard extends StatelessWidget {
       required this.author,
       required this.image_cover,
       required this.penjelasan,
-      required this.attachment_file});
+      required this.attachment_file,
+      required this.attachment_file_name});
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +198,7 @@ class CustomCard extends StatelessWidget {
                     image_cover: image_cover,
                     penjelasan: penjelasan,
                     attachment_file: attachment_file,
+                    attachment_file_name: attachment_file_name,
                   )),
         );
       },
