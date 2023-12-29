@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 class DetailKnowledge extends StatelessWidget {
   final String title;
@@ -31,14 +34,8 @@ class DetailKnowledge extends StatelessWidget {
   }
 
   Future<void> downloadFile(String url, String fileName) async {
-    final directory =
-        await getExternalStorageDirectory(); // Use getExternalStorageDirectory() for internal storage
-    // await getApplicationDocumentsDirectory(); // Use getApplicationDocumentsDirectory() for internal storage
-
     final taskId = await FlutterDownloader.enqueue(
       url: url,
-      // url:'https://upload.wikimedia.org/wikipedia/id/9/94/NarutoCoverTankobon1.jpg',
-      // savedDir: directory!.path,
       savedDir: '/storage/emulated/0/Download',
       fileName: fileName,
       // fileName: 'gambar naruto.jpg',
@@ -53,6 +50,57 @@ class DetailKnowledge extends StatelessWidget {
           'Download task ($id) is in status ($status) and process ($progress)');
     });
   }
+
+  // Future<void> _downloadFileHTTP(String url, String fileName) async {
+  //   final response = await http.get(Uri.parse(url));
+
+  //   if (response.statusCode == 200) {
+  //     final directory = '/storage/emulated/0/Download';
+  //     final filePath =
+  //         '${directory}/${fileName}'; // Replace with your desired file name
+
+  //     final File file = File(filePath);
+  //     await file.writeAsBytes(response.bodyBytes);
+
+  //     // You can now use the 'file' variable to get information about the downloaded file
+  //     print('File downloaded to: $filePath');
+  //   } else {
+  //     // Handle the error
+  //     print('Failed to download file. Status code: ${response.statusCode}');
+  //   }
+  // }
+
+  // Future<void> downloadFileFirebase(
+  //     String storagePath, String localPath) async {
+  //   final storageRef = FirebaseStorage.instance.ref();
+  //   final islandRef = storageRef
+  //       .child("knowledge_files/1703850566679_LOA Peserta MSIB 5 (313).pdf");
+
+  //   final fileName = 'downloaded ' + localPath;
+  //   final filePath = "/storage/emulated/0/Download/$fileName";
+  //   final file = File(filePath);
+
+  //   final downloadTask = islandRef.writeToFile(file);
+  //   downloadTask.snapshotEvents.listen((taskSnapshot) {
+  //     switch (taskSnapshot.state) {
+  //       case TaskState.running:
+  //         // TODO: Handle this case.
+  //         break;
+  //       case TaskState.paused:
+  //         // TODO: Handle this case.
+  //         break;
+  //       case TaskState.success:
+  //         print('Download success');
+  //         break;
+  //       case TaskState.canceled:
+  //         // TODO: Handle this case.
+  //         break;
+  //       case TaskState.error:
+  //         print('ERROR: Download failed');
+  //         break;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +242,8 @@ class DetailKnowledge extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         downloadFile(attachment_file, attachment_file_name);
+                        // _downloadFileHTTP(attachment_file, attachment_file_name);
+                        // downloadFileFirebase(attachment_file, attachment_file_name);
                       },
                       child: Container(
                         padding: EdgeInsets.all(15),

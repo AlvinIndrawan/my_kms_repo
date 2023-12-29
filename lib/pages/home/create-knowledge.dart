@@ -27,12 +27,14 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
   bool isPenjelasanMandatoryFieldFilled = true;
   bool any_image = false;
   bool any_file = false;
+  bool file_oversized = false;
 
   String attachment_file = '';
   String image_cover = '';
   File? _selectedImage;
   File? _selectedFile;
   String _selectedFileName = '';
+  String _uploadedFileName = '';
   final picker = ImagePicker();
 
   bool isLoading = false;
@@ -90,9 +92,11 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         int totalSize = result.files
             .fold(0, (int acc, PlatformFile file) => acc + file.size!);
         if (totalSize > 5 * 1024 * 1024) {
+          file_oversized = true;
           print('Total file size exceeds 5 MB.');
           _selectedFile = null;
         } else {
+          file_oversized = false;
           _selectedFile = File(result.files.single.path!);
           List<String> separatedStrings = splitStringBySingleQuote(
               File(result.files.single.name).toString());
@@ -109,8 +113,9 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
   Future<String?> _uploadFile() async {
     if (_selectedFile != null) {
       try {
-        String fileName =
-            'knowledge_files/${DateTime.now().millisecondsSinceEpoch}_${_selectedFile!.uri.pathSegments.last}';
+        _uploadedFileName =
+            '${DateTime.now().millisecondsSinceEpoch}_${_selectedFile!.uri.pathSegments.last}';
+        String fileName = 'knowledge_files/$_uploadedFileName';
 
         UploadTask uploadTask =
             FirebaseStorage.instance.ref(fileName).putFile(_selectedFile!);
@@ -337,7 +342,6 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
             _selectedImage != null
                 ? Image.file(_selectedImage!)
                 : SizedBox(height: 0),
-            SizedBox(height: 20),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: TextButton(
@@ -391,6 +395,12 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         _selectedFile != null
             ? Text(_selectedFileName.toString())
             : SizedBox(height: 0),
+        (file_oversized)
+            ? Text(
+                'File lebih dari 5 MB',
+                style: TextStyle(color: Colors.red),
+              )
+            : SizedBox(),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextButton(
@@ -461,7 +471,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                           image_cover: image_cover,
                           penjelasan: penjelasanEditingController.text,
                           attachment_file: attachment_file,
-                          attachment_file_name: _selectedFileName.toString());
+                          attachment_file_name: _uploadedFileName.toString());
                       req_message.then((value) {
                         String message = value;
                         ScaffoldMessenger.of(context).showSnackBar(
