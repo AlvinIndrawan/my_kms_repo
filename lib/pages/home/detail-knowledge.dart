@@ -32,15 +32,26 @@ class DetailKnowledge extends StatelessWidget {
 
   Future<void> downloadFile(String url, String fileName) async {
     final directory =
-        await getExternalStorageDirectory(); // Use getApplicationDocumentsDirectory() for internal storage
+        await getExternalStorageDirectory(); // Use getExternalStorageDirectory() for internal storage
+    // await getApplicationDocumentsDirectory(); // Use getApplicationDocumentsDirectory() for internal storage
 
     final taskId = await FlutterDownloader.enqueue(
       url: url,
-      savedDir: directory!.path,
+      // url:'https://upload.wikimedia.org/wikipedia/id/9/94/NarutoCoverTankobon1.jpg',
+      // savedDir: directory!.path,
+      savedDir: '/storage/emulated/0/Download',
       fileName: fileName,
+      // fileName: 'gambar naruto.jpg',
       showNotification: true,
       openFileFromNotification: true,
+      headers: {"Range": ""},
     );
+
+    FlutterDownloader.registerCallback((id, status, progress) {
+      // Handle download status updates
+      print(
+          'Download task ($id) is in status ($status) and process ($progress)');
+    });
   }
 
   @override
