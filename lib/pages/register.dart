@@ -11,6 +11,21 @@ class _RegisterState extends State<Register> {
   String selectedOptionJurusan = 'Teknik Informatika';
   String selectedOptionUser = 'Mahasiswa';
 
+  TextEditingController namaEditingController = TextEditingController();
+  TextEditingController nimEditingController = TextEditingController();
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController nohpEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
+  TextEditingController confrimPasswordEditingController =
+      TextEditingController();
+
+  bool isNamaMandatoryFieldFilled = true;
+  bool isNimMandatoryFieldFilled = true;
+  bool isEmailMandatoryFieldFilled = true;
+  bool isNoHPMandatoryFieldFilled = true;
+  bool isPasswordMandatoryFieldFilled = true;
+  bool isConfirmPasswordMandatoryFieldFilled = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,9 +99,13 @@ class _RegisterState extends State<Register> {
             ],
           ),
           TextField(
+            controller: namaEditingController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Nama',
+              errorText: isNamaMandatoryFieldFilled
+                  ? null
+                  : 'Field tidak boleh kosong',
             ),
           ),
           SizedBox(
@@ -156,10 +175,14 @@ class _RegisterState extends State<Register> {
               : SizedBox(),
           (selectedOptionUser == 'Mahasiswa' || selectedOptionUser == 'Dosen')
               ? TextField(
+                  controller: nimEditingController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'NIM/NIDN',
+                    errorText: isNimMandatoryFieldFilled
+                        ? null
+                        : 'Field tidak boleh kosong',
                   ),
                 )
               : SizedBox(),
@@ -181,9 +204,13 @@ class _RegisterState extends State<Register> {
             ],
           ),
           TextField(
+            controller: emailEditingController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Email',
+              errorText: isEmailMandatoryFieldFilled
+                  ? null
+                  : 'Field tidak boleh kosong',
             ),
           ),
           SizedBox(
@@ -201,10 +228,14 @@ class _RegisterState extends State<Register> {
             ],
           ),
           TextField(
+            controller: nohpEditingController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'No HP',
+              errorText: isNoHPMandatoryFieldFilled
+                  ? null
+                  : 'Field tidak boleh kosong',
             ),
           ),
           SizedBox(
@@ -222,10 +253,14 @@ class _RegisterState extends State<Register> {
             ],
           ),
           TextField(
+            controller: passwordEditingController,
             obscureText: true,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Password',
+              errorText: isPasswordMandatoryFieldFilled
+                  ? null
+                  : 'Field tidak boleh kosong',
             ),
           ),
           SizedBox(
@@ -243,10 +278,14 @@ class _RegisterState extends State<Register> {
             ],
           ),
           TextField(
+            controller: confrimPasswordEditingController,
             obscureText: true,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Confirm Password',
+              errorText: isConfirmPasswordMandatoryFieldFilled
+                  ? null
+                  : 'Field tidak boleh kosong',
             ),
           ),
           SizedBox(
@@ -259,7 +298,93 @@ class _RegisterState extends State<Register> {
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
               onPressed: () {
-                // Insert the code you want to run when the button is pressed
+                //Cek status user
+                if (selectedOptionUser == 'Mahasiswa' ||
+                    selectedOptionUser == 'Dosen') {
+                  //Mahasiswa atau Dosen
+                  // Cek field ada yang kosong tidak
+                  if (namaEditingController.text.isNotEmpty &&
+                      nimEditingController.text.isNotEmpty &&
+                      emailEditingController.text.isNotEmpty &&
+                      nohpEditingController.text.isNotEmpty &&
+                      passwordEditingController.text.isNotEmpty &&
+                      confrimPasswordEditingController.text.isNotEmpty) {
+                    //tambah data disini
+                  } else {
+                    setState(() {
+                      if (namaEditingController.text.isEmpty) {
+                        isNamaMandatoryFieldFilled = false;
+                      } else if (namaEditingController.text.isNotEmpty) {
+                        isNamaMandatoryFieldFilled = true;
+                      }
+                      if (nimEditingController.text.isEmpty) {
+                        isNimMandatoryFieldFilled = false;
+                      } else if (nimEditingController.text.isNotEmpty) {
+                        isNimMandatoryFieldFilled = true;
+                      }
+                      if (emailEditingController.text.isEmpty) {
+                        isEmailMandatoryFieldFilled = false;
+                      } else if (emailEditingController.text.isNotEmpty) {
+                        isEmailMandatoryFieldFilled = true;
+                      }
+                      if (nohpEditingController.text.isEmpty) {
+                        isNoHPMandatoryFieldFilled = false;
+                      } else if (nohpEditingController.text.isNotEmpty) {
+                        isNoHPMandatoryFieldFilled = true;
+                      }
+                      if (passwordEditingController.text.isEmpty) {
+                        isPasswordMandatoryFieldFilled = false;
+                      } else if (passwordEditingController.text.isNotEmpty) {
+                        isPasswordMandatoryFieldFilled = true;
+                      }
+                      if (confrimPasswordEditingController.text.isEmpty) {
+                        isConfirmPasswordMandatoryFieldFilled = false;
+                      } else if (confrimPasswordEditingController
+                          .text.isNotEmpty) {
+                        isConfirmPasswordMandatoryFieldFilled = true;
+                      }
+                    });
+                  }
+                } else {
+                  //Pengurus Lab
+                  // Cek field ada yang kosong tidak
+                  if (namaEditingController.text.isNotEmpty &&
+                      emailEditingController.text.isNotEmpty &&
+                      nohpEditingController.text.isNotEmpty &&
+                      passwordEditingController.text.isNotEmpty &&
+                      confrimPasswordEditingController.text.isNotEmpty) {
+                    //tambah data disini
+                  } else {
+                    setState(() {
+                      if (namaEditingController.text.isEmpty) {
+                        isNamaMandatoryFieldFilled = false;
+                      } else if (namaEditingController.text.isNotEmpty) {
+                        isNamaMandatoryFieldFilled = true;
+                      }
+                      if (emailEditingController.text.isEmpty) {
+                        isEmailMandatoryFieldFilled = false;
+                      } else if (emailEditingController.text.isNotEmpty) {
+                        isEmailMandatoryFieldFilled = true;
+                      }
+                      if (nohpEditingController.text.isEmpty) {
+                        isNoHPMandatoryFieldFilled = false;
+                      } else if (nohpEditingController.text.isNotEmpty) {
+                        isNoHPMandatoryFieldFilled = true;
+                      }
+                      if (passwordEditingController.text.isEmpty) {
+                        isPasswordMandatoryFieldFilled = false;
+                      } else if (passwordEditingController.text.isNotEmpty) {
+                        isPasswordMandatoryFieldFilled = true;
+                      }
+                      if (confrimPasswordEditingController.text.isEmpty) {
+                        isConfirmPasswordMandatoryFieldFilled = false;
+                      } else if (confrimPasswordEditingController
+                          .text.isNotEmpty) {
+                        isConfirmPasswordMandatoryFieldFilled = true;
+                      }
+                    });
+                  }
+                }
               },
               child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 15),
