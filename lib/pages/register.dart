@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -25,6 +26,60 @@ class _RegisterState extends State<Register> {
   bool isNoHPMandatoryFieldFilled = true;
   bool isPasswordMandatoryFieldFilled = true;
   bool isConfirmPasswordMandatoryFieldFilled = true;
+  bool isPasswordSameWithConfirmPassword = true;
+
+  bool isLoading = false;
+
+  Future<void> registerWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      print('User registered successfully!');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Berhasil register!'),
+        ),
+      );
+    } catch (e) {
+      // Handle registration failure, show error messages, etc.
+      print('Failed to register user: $e');
+      if ('$e' ==
+          '[firebase_auth/invalid-email] The email address is badly formatted.') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Format email tidak valid'),
+          ),
+        );
+      } else if ('$e' ==
+          '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Email yang digunakan sudah terdaftar. Gunakan email lain!'),
+          ),
+        );
+      } else if ('$e' ==
+          '[firebase_auth/weak-password] Password should be at least 6 characters') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Password minimal harus 6 karakter'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$e'),
+          ),
+        );
+      }
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +314,9 @@ class _RegisterState extends State<Register> {
               border: OutlineInputBorder(),
               hintText: 'Password',
               errorText: isPasswordMandatoryFieldFilled
-                  ? null
+                  ? (isPasswordSameWithConfirmPassword)
+                      ? null
+                      : 'Password dan confirm password harus sama'
                   : 'Field tidak boleh kosong',
             ),
           ),
@@ -284,7 +341,9 @@ class _RegisterState extends State<Register> {
               border: OutlineInputBorder(),
               hintText: 'Confirm Password',
               errorText: isConfirmPasswordMandatoryFieldFilled
-                  ? null
+                  ? (isPasswordSameWithConfirmPassword)
+                      ? null
+                      : 'Password dan confirm password harus sama'
                   : 'Field tidak boleh kosong',
             ),
           ),
@@ -294,130 +353,169 @@ class _RegisterState extends State<Register> {
           SizedBox(
             height: 30,
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: ElevatedButton(
-              onPressed: () {
-                //Cek status user
-                if (selectedOptionUser == 'Mahasiswa' ||
-                    selectedOptionUser == 'Dosen') {
-                  //Mahasiswa atau Dosen
-                  // Cek field ada yang kosong tidak
-                  if (namaEditingController.text.isNotEmpty &&
-                      nimEditingController.text.isNotEmpty &&
-                      emailEditingController.text.isNotEmpty &&
-                      nohpEditingController.text.isNotEmpty &&
-                      passwordEditingController.text.isNotEmpty &&
-                      confrimPasswordEditingController.text.isNotEmpty) {
-                    //tambah data disini
-                  } else {
-                    setState(() {
-                      if (namaEditingController.text.isEmpty) {
-                        isNamaMandatoryFieldFilled = false;
-                      } else if (namaEditingController.text.isNotEmpty) {
-                        isNamaMandatoryFieldFilled = true;
+          (isLoading)
+              ? Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.4,
+                  ),
+                  child: CircularProgressIndicator(),
+                )
+              : SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      //Cek status user
+                      if (selectedOptionUser == 'Mahasiswa' ||
+                          selectedOptionUser == 'Dosen') {
+                        //Mahasiswa atau Dosen
+                        // Cek field ada yang kosong tidak
+                        if (namaEditingController.text.isNotEmpty &&
+                            nimEditingController.text.isNotEmpty &&
+                            emailEditingController.text.isNotEmpty &&
+                            nohpEditingController.text.isNotEmpty &&
+                            passwordEditingController.text.isNotEmpty &&
+                            confrimPasswordEditingController.text.isNotEmpty) {
+                          //Cek Password sama dengan confirm password tidak
+                          if (passwordEditingController.text ==
+                              confrimPasswordEditingController.text) {
+                            isNamaMandatoryFieldFilled = true;
+                            isNimMandatoryFieldFilled = true;
+                            isEmailMandatoryFieldFilled = true;
+                            isNoHPMandatoryFieldFilled = true;
+                            isPasswordMandatoryFieldFilled = true;
+                            isConfirmPasswordMandatoryFieldFilled = true;
+                            isPasswordSameWithConfirmPassword = true;
+                            registerWithEmailAndPassword(
+                                emailEditingController.text,
+                                passwordEditingController.text);
+                            print('berhasil register');
+                          } else {
+                            setState(() {
+                              isPasswordMandatoryFieldFilled = true;
+                              isConfirmPasswordMandatoryFieldFilled = true;
+                              isPasswordSameWithConfirmPassword = false;
+                              isLoading = false;
+                            });
+                          }
+                        } else {
+                          setState(() {
+                            if (namaEditingController.text.isEmpty) {
+                              isNamaMandatoryFieldFilled = false;
+                            } else if (namaEditingController.text.isNotEmpty) {
+                              isNamaMandatoryFieldFilled = true;
+                            }
+                            if (nimEditingController.text.isEmpty) {
+                              isNimMandatoryFieldFilled = false;
+                            } else if (nimEditingController.text.isNotEmpty) {
+                              isNimMandatoryFieldFilled = true;
+                            }
+                            if (emailEditingController.text.isEmpty) {
+                              isEmailMandatoryFieldFilled = false;
+                            } else if (emailEditingController.text.isNotEmpty) {
+                              isEmailMandatoryFieldFilled = true;
+                            }
+                            if (nohpEditingController.text.isEmpty) {
+                              isNoHPMandatoryFieldFilled = false;
+                            } else if (nohpEditingController.text.isNotEmpty) {
+                              isNoHPMandatoryFieldFilled = true;
+                            }
+                            if (passwordEditingController.text.isEmpty) {
+                              isPasswordMandatoryFieldFilled = false;
+                            } else if (passwordEditingController
+                                .text.isNotEmpty) {
+                              isPasswordMandatoryFieldFilled = true;
+                            }
+                            if (confrimPasswordEditingController.text.isEmpty) {
+                              isConfirmPasswordMandatoryFieldFilled = false;
+                            } else if (confrimPasswordEditingController
+                                .text.isNotEmpty) {
+                              isConfirmPasswordMandatoryFieldFilled = true;
+                            }
+                            isLoading = false;
+                          });
+                        }
+                      } else {
+                        //Pengurus Lab
+                        // Cek field ada yang kosong tidak
+                        if (namaEditingController.text.isNotEmpty &&
+                            emailEditingController.text.isNotEmpty &&
+                            nohpEditingController.text.isNotEmpty &&
+                            passwordEditingController.text.isNotEmpty &&
+                            confrimPasswordEditingController.text.isNotEmpty) {
+                          //tambah data disini
+                        } else {
+                          setState(() {
+                            if (namaEditingController.text.isEmpty) {
+                              isNamaMandatoryFieldFilled = false;
+                            } else if (namaEditingController.text.isNotEmpty) {
+                              isNamaMandatoryFieldFilled = true;
+                            }
+                            if (emailEditingController.text.isEmpty) {
+                              isEmailMandatoryFieldFilled = false;
+                            } else if (emailEditingController.text.isNotEmpty) {
+                              isEmailMandatoryFieldFilled = true;
+                            }
+                            if (nohpEditingController.text.isEmpty) {
+                              isNoHPMandatoryFieldFilled = false;
+                            } else if (nohpEditingController.text.isNotEmpty) {
+                              isNoHPMandatoryFieldFilled = true;
+                            }
+                            if (passwordEditingController.text.isEmpty) {
+                              isPasswordMandatoryFieldFilled = false;
+                            } else if (passwordEditingController
+                                .text.isNotEmpty) {
+                              isPasswordMandatoryFieldFilled = true;
+                            }
+                            if (confrimPasswordEditingController.text.isEmpty) {
+                              isConfirmPasswordMandatoryFieldFilled = false;
+                            } else if (confrimPasswordEditingController
+                                .text.isNotEmpty) {
+                              isConfirmPasswordMandatoryFieldFilled = true;
+                            }
+                            isLoading = false;
+                          });
+                        }
                       }
-                      if (nimEditingController.text.isEmpty) {
-                        isNimMandatoryFieldFilled = false;
-                      } else if (nimEditingController.text.isNotEmpty) {
-                        isNimMandatoryFieldFilled = true;
-                      }
-                      if (emailEditingController.text.isEmpty) {
-                        isEmailMandatoryFieldFilled = false;
-                      } else if (emailEditingController.text.isNotEmpty) {
-                        isEmailMandatoryFieldFilled = true;
-                      }
-                      if (nohpEditingController.text.isEmpty) {
-                        isNoHPMandatoryFieldFilled = false;
-                      } else if (nohpEditingController.text.isNotEmpty) {
-                        isNoHPMandatoryFieldFilled = true;
-                      }
-                      if (passwordEditingController.text.isEmpty) {
-                        isPasswordMandatoryFieldFilled = false;
-                      } else if (passwordEditingController.text.isNotEmpty) {
-                        isPasswordMandatoryFieldFilled = true;
-                      }
-                      if (confrimPasswordEditingController.text.isEmpty) {
-                        isConfirmPasswordMandatoryFieldFilled = false;
-                      } else if (confrimPasswordEditingController
-                          .text.isNotEmpty) {
-                        isConfirmPasswordMandatoryFieldFilled = true;
-                      }
-                    });
-                  }
-                } else {
-                  //Pengurus Lab
-                  // Cek field ada yang kosong tidak
-                  if (namaEditingController.text.isNotEmpty &&
-                      emailEditingController.text.isNotEmpty &&
-                      nohpEditingController.text.isNotEmpty &&
-                      passwordEditingController.text.isNotEmpty &&
-                      confrimPasswordEditingController.text.isNotEmpty) {
-                    //tambah data disini
-                  } else {
-                    setState(() {
-                      if (namaEditingController.text.isEmpty) {
-                        isNamaMandatoryFieldFilled = false;
-                      } else if (namaEditingController.text.isNotEmpty) {
-                        isNamaMandatoryFieldFilled = true;
-                      }
-                      if (emailEditingController.text.isEmpty) {
-                        isEmailMandatoryFieldFilled = false;
-                      } else if (emailEditingController.text.isNotEmpty) {
-                        isEmailMandatoryFieldFilled = true;
-                      }
-                      if (nohpEditingController.text.isEmpty) {
-                        isNoHPMandatoryFieldFilled = false;
-                      } else if (nohpEditingController.text.isNotEmpty) {
-                        isNoHPMandatoryFieldFilled = true;
-                      }
-                      if (passwordEditingController.text.isEmpty) {
-                        isPasswordMandatoryFieldFilled = false;
-                      } else if (passwordEditingController.text.isNotEmpty) {
-                        isPasswordMandatoryFieldFilled = true;
-                      }
-                      if (confrimPasswordEditingController.text.isEmpty) {
-                        isConfirmPasswordMandatoryFieldFilled = false;
-                      } else if (confrimPasswordEditingController
-                          .text.isNotEmpty) {
-                        isConfirmPasswordMandatoryFieldFilled = true;
-                      }
-                    });
-                  }
-                }
-              },
-              child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    'Create Account',
-                    style: TextStyle(color: Colors.white),
-                  )),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              ),
-            ),
-          ),
+                    },
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: Text(
+                          'Create Account',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.black),
+                    ),
+                  ),
+                ),
           SizedBox(
             height: 10,
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: OutlinedButton(
-              onPressed: () {
-                // Insert the code you want to run when the button is pressed
-                Navigator.pop(context);
-              },
-              child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  child: Text('Login')),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                side: MaterialStateProperty.all<BorderSide>(
-                  BorderSide(width: 1.0, color: Colors.black),
+          (isLoading)
+              ? SizedBox()
+              : SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // Insert the code you want to run when the button is pressed
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: Text('Login')),
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.black),
+                      side: MaterialStateProperty.all<BorderSide>(
+                        BorderSide(width: 1.0, color: Colors.black),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
           SizedBox(
             height: 30,
           ),
