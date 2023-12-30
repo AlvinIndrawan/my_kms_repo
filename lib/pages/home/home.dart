@@ -13,7 +13,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // _initializeData();
     Future<String> user_email = getEmailUser();
     user_email.then((value) async {
       var data_user = getDataUserByEmail(value);

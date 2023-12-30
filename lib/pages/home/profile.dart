@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
 import '../../services/logout-service.dart';
 import '../login.dart';
+import 'package:kms_esaunggul/services/get-user-service.dart';
 
-class Profile extends StatelessWidget {
-  String statusUser = 'Mahasiswa';
+class Profile extends StatefulWidget {
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  // Declare your state variables here
+
+  var user;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<String> user_email = getEmailUser();
+    user_email.then((value) async {
+      var data_user = getDataUserByEmail(value);
+      data_user.then((value) {
+        setState(() {
+          user = value;
+        });
+        print('cek data : $value');
+        print(value?['jurusan']);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +62,7 @@ class Profile extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Nama User',
+                  (user != null) ? user['nama'] : '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -47,7 +71,7 @@ class Profile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  statusUser,
+                  (user != null) ? user['status'] : '',
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -63,48 +87,52 @@ class Profile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              (statusUser == 'Mahasiswa' || statusUser == 'Dosen')
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 10),
-                        Text('Jurusan'),
-                        SizedBox(height: 10),
-                        Text(
-                          'Teknik Informatika',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Divider(
-                          height: 20, // Adjust the height of the divider
-                          color: Colors.grey, // Change the color of the divider
-                        ),
-                        SizedBox(height: 10),
-                        Text('NIM/NIDN'),
-                        SizedBox(height: 10),
-                        Text(
-                          '1234567890',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Divider(
-                          height: 20, // Adjust the height of the divider
-                          color: Colors.grey, // Change the color of the divider
-                        ),
-                      ],
-                    )
+              (user != null)
+                  ? (user['status'] == 'Mahasiswa' || user['status'] == 'Dosen')
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            Text('Jurusan'),
+                            SizedBox(height: 10),
+                            Text(
+                              (user != null) ? user['jurusan'] : '',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Divider(
+                              height: 20, // Adjust the height of the divider
+                              color: Colors
+                                  .grey, // Change the color of the divider
+                            ),
+                            SizedBox(height: 10),
+                            Text('NIM/NIDN'),
+                            SizedBox(height: 10),
+                            Text(
+                              (user != null) ? user['nim'] : '',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Divider(
+                              height: 20, // Adjust the height of the divider
+                              color: Colors
+                                  .grey, // Change the color of the divider
+                            ),
+                          ],
+                        )
+                      : SizedBox()
                   : SizedBox(),
               SizedBox(height: 10),
               Text('Email'),
               SizedBox(height: 10),
               Text(
-                'alvin.av639@student.esaunggul.ac.id',
+                (user != null) ? user['email'] : '',
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -119,7 +147,7 @@ class Profile extends StatelessWidget {
               Text('No HP'),
               SizedBox(height: 10),
               Text(
-                '081234567890',
+                (user != null) ? user['no hp'] : '',
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
