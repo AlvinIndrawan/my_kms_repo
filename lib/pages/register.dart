@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../services/register-user-service.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -31,18 +32,34 @@ class _RegisterState extends State<Register> {
   bool isLoading = false;
 
   Future<void> registerWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, String jurusan, String nim) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       print('User registered successfully!');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Berhasil register!'),
-        ),
-      );
+      Future<String> req_message = addUser(
+          status: selectedOptionUser,
+          nama: namaEditingController.text,
+          jurusan: jurusan,
+          nim: nim,
+          email: emailEditingController.text,
+          no_hp: nohpEditingController.text);
+      req_message.then((value) {
+        String message = value;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(message),
+          ),
+        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => Login()),
+        // );
+        Navigator.pop(context);
+      });
     } catch (e) {
       // Handle registration failure, show error messages, etc.
       print('Failed to register user: $e');
@@ -50,6 +67,7 @@ class _RegisterState extends State<Register> {
           '[firebase_auth/invalid-email] The email address is badly formatted.') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.red,
             content: Text('Format email tidak valid'),
           ),
         );
@@ -57,6 +75,7 @@ class _RegisterState extends State<Register> {
           '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.red,
             content: Text(
                 'Email yang digunakan sudah terdaftar. Gunakan email lain!'),
           ),
@@ -65,12 +84,14 @@ class _RegisterState extends State<Register> {
           '[firebase_auth/weak-password] Password should be at least 6 characters') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.red,
             content: Text('Password minimal harus 6 karakter'),
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.red,
             content: Text('$e'),
           ),
         );
@@ -378,24 +399,24 @@ class _RegisterState extends State<Register> {
                             nohpEditingController.text.isNotEmpty &&
                             passwordEditingController.text.isNotEmpty &&
                             confrimPasswordEditingController.text.isNotEmpty) {
+                          isNamaMandatoryFieldFilled = true;
+                          isNimMandatoryFieldFilled = true;
+                          isEmailMandatoryFieldFilled = true;
+                          isNoHPMandatoryFieldFilled = true;
+                          isPasswordMandatoryFieldFilled = true;
+                          isConfirmPasswordMandatoryFieldFilled = true;
                           //Cek Password sama dengan confirm password tidak
                           if (passwordEditingController.text ==
                               confrimPasswordEditingController.text) {
-                            isNamaMandatoryFieldFilled = true;
-                            isNimMandatoryFieldFilled = true;
-                            isEmailMandatoryFieldFilled = true;
-                            isNoHPMandatoryFieldFilled = true;
-                            isPasswordMandatoryFieldFilled = true;
-                            isConfirmPasswordMandatoryFieldFilled = true;
                             isPasswordSameWithConfirmPassword = true;
                             registerWithEmailAndPassword(
                                 emailEditingController.text,
-                                passwordEditingController.text);
+                                passwordEditingController.text,
+                                selectedOptionJurusan,
+                                nimEditingController.text);
                             print('berhasil register');
                           } else {
                             setState(() {
-                              isPasswordMandatoryFieldFilled = true;
-                              isConfirmPasswordMandatoryFieldFilled = true;
                               isPasswordSameWithConfirmPassword = false;
                               isLoading = false;
                             });
@@ -445,6 +466,28 @@ class _RegisterState extends State<Register> {
                             nohpEditingController.text.isNotEmpty &&
                             passwordEditingController.text.isNotEmpty &&
                             confrimPasswordEditingController.text.isNotEmpty) {
+                          isNamaMandatoryFieldFilled = true;
+                          isEmailMandatoryFieldFilled = true;
+                          isNoHPMandatoryFieldFilled = true;
+                          isPasswordMandatoryFieldFilled = true;
+                          isConfirmPasswordMandatoryFieldFilled = true;
+                          //Cek Password sama dengan confirm password tidak
+                          if (passwordEditingController.text ==
+                              confrimPasswordEditingController.text) {
+                            isPasswordSameWithConfirmPassword = true;
+                            registerWithEmailAndPassword(
+                                emailEditingController.text,
+                                passwordEditingController.text,
+                                '',
+                                '');
+                            print('berhasil register');
+                          } else {
+                            setState(() {
+                              isPasswordSameWithConfirmPassword = false;
+                              isLoading = false;
+                            });
+                          }
+                          print('data tidak ada yg kosong');
                           //tambah data disini
                         } else {
                           setState(() {

@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
       ),
       // A widget which will be started on application startup
-      home: Register(),
+      home: Login(),
     );
   }
 }

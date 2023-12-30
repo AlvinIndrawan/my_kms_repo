@@ -476,6 +476,12 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                         String message = value;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
+                            backgroundColor: (message ==
+                                        'Knowledge berhasil dipublish' ||
+                                    message ==
+                                        'Knowledge berhasil disimpan sebagai draft')
+                                ? Colors.green
+                                : Colors.red,
                             content: Text(message),
                           ),
                         );
