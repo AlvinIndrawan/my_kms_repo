@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import '../../services/login-service.dart';
 import 'home/homepage.dart';
 import 'register.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  // Deklarasikan variabel state di sini
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
+
+  bool isEmailMandatoryFieldFilled = true;
+  bool isPasswordMandatoryFieldFilled = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text('Halaman Stateless'),
-        // ),
         body: Padding(
       padding: EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
         children: [
-          Spacer(),
+          SizedBox(height: 50),
           Center(
             child: Container(
               padding: EdgeInsets.all(15),
@@ -39,7 +48,7 @@ class Login extends StatelessWidget {
               ),
             ),
           ),
-          Spacer(),
+          SizedBox(height: 50),
           Center(
             child: Text(
               'Login',
@@ -61,15 +70,19 @@ class Login extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Spacer(),
+          SizedBox(height: 50),
           SizedBox(
             height: 10,
           ),
           Text('Email'),
           TextField(
+            controller: emailEditingController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Email',
+              errorText: isEmailMandatoryFieldFilled
+                  ? null
+                  : 'Field tidak boleh kosong',
             ),
           ),
           SizedBox(
@@ -77,25 +90,85 @@ class Login extends StatelessWidget {
           ),
           Text('Password'),
           TextField(
+            controller: passwordEditingController,
             obscureText: true,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Password',
+              errorText: isPasswordMandatoryFieldFilled
+                  ? null
+                  : 'Field tidak boleh kosong',
             ),
           ),
           SizedBox(
             height: 10,
           ),
-          Spacer(),
+          SizedBox(height: 50),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                //Cek apakah fieldnya kosong?
+                if (emailEditingController.text.isNotEmpty &&
+                    passwordEditingController.text.isNotEmpty) {
+                  setState(() {
+                    isEmailMandatoryFieldFilled = true;
+                    isPasswordMandatoryFieldFilled = true;
+                  });
+                  Future<String> req_message = loginUser(
+                      emailEditingController.text,
+                      passwordEditingController.text);
+                  req_message.then((value) {
+                    String message;
+                    if (value == 'Berhasil login') {
+                      message = value;
+                    } else if (value ==
+                        '[firebase_auth/invalid-email] The email address is badly formatted.') {
+                      message = 'Format email tidak valid';
+                    } else if (value ==
+                        '[firebase_auth/invalid-credential] The supplied auth credential is incorrect, malformed or has expired.') {
+                      message = 'Email atau password salah';
+                    } else {
+                      message = value;
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: (message == 'Berhasil login')
+                            ? Colors.green
+                            : Colors.red,
+                        content: Text(message),
+                      ),
+                    );
+                    if (message == 'Berhasil login') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Homepage()),
+                      );
+                    }
+                  });
+                } else if (emailEditingController.text.isEmpty &&
+                    passwordEditingController.text.isNotEmpty) {
+                  setState(() {
+                    isEmailMandatoryFieldFilled = false;
+                    isPasswordMandatoryFieldFilled = true;
+                  });
+                } else if (emailEditingController.text.isNotEmpty &&
+                    passwordEditingController.text.isEmpty) {
+                  setState(() {
+                    isEmailMandatoryFieldFilled = true;
+                    isPasswordMandatoryFieldFilled = false;
+                  });
+                } else {
+                  setState(() {
+                    isEmailMandatoryFieldFilled = false;
+                    isPasswordMandatoryFieldFilled = false;
+                  });
+                }
                 // Insert the code you want to run when the button is pressed
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Homepage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => Homepage()),
+                // );
               },
               child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 15),

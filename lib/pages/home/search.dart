@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../services/search-knowledge-service.dart';
 import 'detail-knowledge.dart';
@@ -13,7 +12,7 @@ class _SearchState extends State<Search> {
 
   TextEditingController searchEditingController = TextEditingController();
   // Stream<QuerySnapshot<Map<String, dynamic>>>? _searchResults;
-  Stream<QuerySnapshot<Map<String, dynamic>>>? _searchResults;
+
   var data;
   int jumlah_data = 0;
   bool already_search = false;
