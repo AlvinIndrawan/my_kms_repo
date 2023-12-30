@@ -14,21 +14,15 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  @override
-  void initState() {
-    super.initState();
-    checkLoginStatus();
-  }
-
-  int _selectedIndex = 0;
-  List<Widget> _widgetOptions = <Widget>[
-    //Home
+  final List<Widget> _widgetOptions = <Widget>[
     Home(),
     Search(),
     CreateKnowledge(),
     Myknowledge(),
     Profile(),
   ];
+
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {

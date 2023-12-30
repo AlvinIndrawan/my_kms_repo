@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/logout-service.dart';
+import '../login.dart';
 
 class Profile extends StatelessWidget {
   String statusUser = 'Mahasiswa';
@@ -147,7 +148,10 @@ class Profile extends StatelessWidget {
                         ),
                       );
                       if (message == 'Berhasil logout') {
-                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Login()),
+                        );
                       }
                     });
                   },

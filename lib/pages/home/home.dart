@@ -1,6 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:kms_esaunggul/services/get-user-service.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  // Declare your state variables here
+  var user;
+
+  @override
+  void initState() {
+    super.initState();
+    // _initializeData();
+    Future<String> user_email = getEmailUser();
+    user_email.then((value) async {
+      var data_user = getDataUserByEmail(value);
+      data_user.then((value) {
+        setState(() {
+          user = value;
+        });
+        print('cek data : $value');
+        print(value?['jurusan']);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -15,7 +41,8 @@ class Home extends StatelessWidget {
           ),
         ),
         Text(
-          'Nama User',
+          (user != null) ? user['nama'] : '',
+          // 'Nama User',
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,

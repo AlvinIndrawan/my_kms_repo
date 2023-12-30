@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/login-service.dart';
+import '../../services/logout-service.dart';
 import 'home/homepage.dart';
 import 'register.dart';
 
@@ -15,6 +16,24 @@ class _LoginState extends State<Login> {
 
   bool isEmailMandatoryFieldFilled = true;
   bool isPasswordMandatoryFieldFilled = true;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future<String> req_message = logoutUser();
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   String login_status = checkLoginStatus();
+  //   if (login_status == 'User sudah login') {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => Homepage()),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +137,7 @@ class _LoginState extends State<Login> {
                   Future<String> req_message = loginUser(
                       emailEditingController.text,
                       passwordEditingController.text);
-                  req_message.then((value) {
+                  req_message.then((value) async {
                     String message;
                     if (value == 'Berhasil login') {
                       message = value;
@@ -140,10 +159,11 @@ class _LoginState extends State<Login> {
                       ),
                     );
                     if (message == 'Berhasil login') {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => Homepage()),
                       );
+                      // await saveLoginStatus(true);
                     }
                   });
                 } else if (emailEditingController.text.isEmpty &&
