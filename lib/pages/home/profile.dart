@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/logout-service.dart';
 
 class Profile extends StatelessWidget {
   String statusUser = 'Mahasiswa';
@@ -134,7 +135,21 @@ class Profile extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Insert the code you want to run when the button is pressed
-                    Navigator.pop(context);
+                    Future<String> req_message = logoutUser();
+                    req_message.then((value) {
+                      String message = value;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: (message == 'Berhasil logout')
+                              ? Colors.green
+                              : Colors.red,
+                          content: Text(message),
+                        ),
+                      );
+                      if (message == 'Berhasil logout') {
+                        Navigator.pop(context);
+                      }
+                    });
                   },
                   child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 15),

@@ -4,6 +4,7 @@ import 'search.dart';
 import 'create-knowledge.dart';
 import 'myknowledge.dart';
 import 'profile.dart';
+import '../../services/login-service.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -13,6 +14,12 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     //Home

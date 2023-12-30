@@ -14,3 +14,15 @@ Future<String> loginUser(String email, String password) async {
     // Handle login failure, show error messages, etc.
   }
 }
+
+void checkLoginStatus() {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  if (user != null) {
+    // User is already logged in
+    print('User is signed in: ${user.uid}');
+  } else {
+    // User is not logged in
+    print('User is not signed in');
+  }
+}
