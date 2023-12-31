@@ -593,8 +593,98 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                       : SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: OutlinedButton(
-                            onPressed: () {
-                              // Insert the code you want to run when the button is pressed
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              //Cek nilai category atau matkul
+                              if (selectedOptionCategory == 'Project Base') {
+                                matkul_atau_kategori = selectedOptionMatkul;
+                              } else if (selectedOptionCategory ==
+                                  'Modul Kuliah') {
+                                matkul_atau_kategori = selectedOptionMatkul;
+                              } else if (selectedOptionCategory ==
+                                  'Informasi') {
+                                matkul_atau_kategori =
+                                    selectedOptionKategoriInformasi;
+                              } else {
+                                matkul_atau_kategori =
+                                    selectedOptionKategoriHelpdesk;
+                              }
+                              //Cek field judul kosong atau tidak
+                              if (judulEditingController.text.isNotEmpty &&
+                                  penjelasanEditingController.text.isNotEmpty) {
+                                if (any_image == true) {
+                                  final String? imageDownloadUrl =
+                                      await _uploadImage();
+                                  print(imageDownloadUrl);
+                                  image_cover = imageDownloadUrl.toString();
+                                } else {
+                                  image_cover = '';
+                                }
+                                if (any_file == true) {
+                                  final String? fileDownloadUrl =
+                                      await _uploadFile();
+                                  print(fileDownloadUrl);
+                                  attachment_file = fileDownloadUrl.toString();
+                                } else {
+                                  attachment_file = '';
+                                }
+
+                                Future<String> req_message = createKnowledge(
+                                    status: "draft",
+                                    type: selectedOptionCategory,
+                                    title: judulEditingController.text,
+                                    category: matkul_atau_kategori,
+                                    image_cover: image_cover,
+                                    penjelasan:
+                                        penjelasanEditingController.text,
+                                    attachment_file: attachment_file,
+                                    attachment_file_name:
+                                        _uploadedFileName.toString(),
+                                    author_name: user['nama'],
+                                    author_email: user['email']);
+                                req_message.then((value) {
+                                  String message = value;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: (message ==
+                                                  'Knowledge berhasil dipublish' ||
+                                              message ==
+                                                  'Knowledge berhasil disimpan sebagai draft')
+                                          ? Colors.green
+                                          : Colors.red,
+                                      content: Text(message),
+                                    ),
+                                  );
+                                });
+                                setState(() {
+                                  isJudulMandatoryFieldFilled = true;
+                                  isPenjelasanMandatoryFieldFilled = true;
+                                  isLoading = false;
+                                });
+                              } else if (judulEditingController.text.isEmpty &&
+                                  penjelasanEditingController.text.isNotEmpty) {
+                                setState(() {
+                                  isJudulMandatoryFieldFilled = false;
+                                  isPenjelasanMandatoryFieldFilled = true;
+                                  isLoading = false;
+                                });
+                              } else if (judulEditingController
+                                      .text.isNotEmpty &&
+                                  penjelasanEditingController.text.isEmpty) {
+                                setState(() {
+                                  isJudulMandatoryFieldFilled = true;
+                                  isPenjelasanMandatoryFieldFilled = false;
+                                  isLoading = false;
+                                });
+                              } else {
+                                setState(() {
+                                  isJudulMandatoryFieldFilled = false;
+                                  isPenjelasanMandatoryFieldFilled = false;
+                                  isLoading = false;
+                                });
+                              }
                             },
                             child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 15),
