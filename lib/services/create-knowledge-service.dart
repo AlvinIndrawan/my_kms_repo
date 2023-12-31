@@ -8,7 +8,9 @@ Future<String> createKnowledge(
     required String image_cover,
     required String penjelasan,
     required String attachment_file,
-    required String attachment_file_name}) async {
+    required String attachment_file_name,
+    required String author_name,
+    required String author_email}) async {
   try {
     // Get a reference to the Firestore instance
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -26,6 +28,8 @@ Future<String> createKnowledge(
       'penjelasan': penjelasan,
       'attachment file': attachment_file,
       'attachment file name': attachment_file_name,
+      'nama author': author_name,
+      'email author': author_email
     });
 
     print("Knowledge Added");

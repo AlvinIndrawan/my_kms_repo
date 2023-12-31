@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import '../../services/create-knowledge-service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:kms_esaunggul/services/get-user-service.dart';
 
 class CreateKnowledge extends StatefulWidget {
   @override
@@ -13,6 +13,25 @@ class CreateKnowledge extends StatefulWidget {
 
 class _CreateKnowledgeState extends State<CreateKnowledge> {
   // Add your state variables here
+
+  var user;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<String> user_email = getEmailUser();
+    user_email.then((value) async {
+      var data_user = getDataUserByEmail(value);
+      data_user.then((value) {
+        setState(() {
+          user = value;
+        });
+        print('cek data : $value');
+        print(value?['jurusan']);
+      });
+    });
+  }
+
   TextEditingController judulEditingController = TextEditingController();
   TextEditingController penjelasanEditingController = TextEditingController();
 
@@ -471,7 +490,9 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                           image_cover: image_cover,
                           penjelasan: penjelasanEditingController.text,
                           attachment_file: attachment_file,
-                          attachment_file_name: _uploadedFileName.toString());
+                          attachment_file_name: _uploadedFileName.toString(),
+                          author_name: user['nama'],
+                          author_email: user['email']);
                       req_message.then((value) {
                         String message = value;
                         ScaffoldMessenger.of(context).showSnackBar(
