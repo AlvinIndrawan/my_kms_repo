@@ -127,7 +127,7 @@ class _SearchState extends State<Search> {
                               title: knowledge['title'],
                               type: knowledge['type'],
                               category: knowledge['category'],
-                              author: 'Alvin Indrawan',
+                              author: knowledge['nama author'],
                               image_cover: knowledge['image cover'],
                               penjelasan: knowledge['penjelasan'],
                               attachment_file: knowledge['attachment file'],
