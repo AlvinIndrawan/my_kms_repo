@@ -134,7 +134,7 @@ class DetailKnowledge extends StatelessWidget {
           SizedBox(height: 10),
           (image_cover == '')
               ? Image.asset(
-                  'assets/images/contoh card.png',
+                  'assets/images/image background default.jpg',
                   fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
                 )
