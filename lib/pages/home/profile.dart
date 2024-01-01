@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/logout-service.dart';
 import '../login.dart';
-import 'package:kms_esaunggul/services/get-user-service.dart';
+import '../../services/get-user-service.dart';
 
 class Profile extends StatefulWidget {
   @override

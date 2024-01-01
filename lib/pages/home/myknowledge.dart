@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../services/get-user-service.dart';
+import '../../services/get-myknowledge-service.dart';
 
 class Myknowledge extends StatefulWidget {
   @override
@@ -9,10 +11,21 @@ class _MyknowledgeState extends State<Myknowledge>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  var user;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    Future<String> user_email = getEmailUser();
+    user_email.then((value) async {
+      var data_user = getDataUserByEmail(value);
+      data_user.then((value) async {
+        setState(() {
+          user = value;
+        });
+      });
+    });
   }
 
   @override
@@ -60,22 +73,93 @@ class _MyknowledgeState extends State<Myknowledge>
             controller: _tabController,
             children: <Widget>[
               //PUBLISHED TAB
-              ListView(
-                padding: EdgeInsets.all(15),
-                children: [
-                  CustomCard(),
-                  CustomCard(),
-                  CustomCard(),
-                ],
-              ),
+              (user != null)
+                  ? Padding(
+                      padding: EdgeInsets.all(15),
+                      child: FutureBuilder(
+                        future: getMyPublishedKnowledge(user['email']),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            List<Map<String, dynamic>> documents =
+                                snapshot.data as List<Map<String, dynamic>>;
+                            // Process your documents here
+                            return (documents.length > 0)
+                                ? ListView.builder(
+                                    itemCount: documents.length,
+                                    itemBuilder: (context, index) {
+                                      // Build your UI based on the retrieved data
+                                      return CustomCard(
+                                        title: documents[index]['title']
+                                            .toString(),
+                                        image_cover: documents[index]
+                                                ['image cover']
+                                            .toString(),
+                                        type:
+                                            documents[index]['type'].toString(),
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Image.asset(
+                                      'assets/images/not found.png',
+                                      width: 180,
+                                    ),
+                                  );
+                          }
+                        },
+                      ),
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    ),
               //DRAFT TAB
-              ListView(
-                padding: EdgeInsets.all(15),
-                children: [
-                  CustomCard(),
-                  CustomCard(),
-                ],
-              ),
+              (user != null)
+                  ? Padding(
+                      padding: EdgeInsets.all(15),
+                      child: FutureBuilder(
+                        future: getMyDraftKnowledge(user['email']),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            List<Map<String, dynamic>> documents =
+                                snapshot.data as List<Map<String, dynamic>>;
+                            // Process your documents here
+                            return (documents.length > 0)
+                                ? ListView.builder(
+                                    itemCount: documents.length,
+                                    itemBuilder: (context, index) {
+                                      // Build your UI based on the retrieved data
+                                      return CustomCard(
+                                        title: documents[index]['title']
+                                            .toString(),
+                                        image_cover: documents[index]
+                                                ['image cover']
+                                            .toString(),
+                                        type:
+                                            documents[index]['type'].toString(),
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Image.asset(
+                                      'assets/images/not found.png',
+                                      width: 180,
+                                    ),
+                                  );
+                          }
+                        },
+                      ),
+                    )
+                  : Center(child: CircularProgressIndicator()),
             ],
           ),
         ),
@@ -87,6 +171,13 @@ class _MyknowledgeState extends State<Myknowledge>
 // CUSTOM WIDGET
 
 class CustomCard extends StatelessWidget {
+  final String title;
+  final String image_cover;
+  final String type;
+
+  CustomCard(
+      {required this.title, required this.image_cover, required this.type});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -112,12 +203,34 @@ class CustomCard extends StatelessWidget {
               topLeft: Radius.circular(15),
               bottomLeft: Radius.circular(15),
             ),
-            child: Image.asset(
-              'assets/images/contoh card.png',
-              fit: BoxFit.cover,
-              width: (MediaQuery.of(context).size.width - 30) * 0.35,
-              height: 100,
-            ),
+            child: (image_cover == '')
+                ? Image.asset(
+                    'assets/images/contoh card.png',
+                    fit: BoxFit.cover,
+                    width: (MediaQuery.of(context).size.width - 30) * 0.35,
+                    height: 100,
+                  )
+                : Image.network(
+                    image_cover,
+                    fit: BoxFit.cover,
+                    width: (MediaQuery.of(context).size.width - 30) * 0.35,
+                    height: 100,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    (loadingProgress.expectedTotalBytes ?? 1)
+                                : null,
+                          ),
+                        );
+                      }
+                    },
+                  ),
           ),
           Padding(
             padding: EdgeInsets.all(10),
@@ -127,7 +240,7 @@ class CustomCard extends StatelessWidget {
                 Container(
                   width: ((MediaQuery.of(context).size.width - 30) * 0.65) - 20,
                   child: Text(
-                    'Belajar Framework Bootstrap Untuk Pemrograman Web',
+                    title,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -137,7 +250,7 @@ class CustomCard extends StatelessWidget {
                 Container(
                   width: ((MediaQuery.of(context).size.width - 30) * 0.65) - 20,
                   child: Text(
-                    'Pemrograman Berorientasi Objek',
+                    type,
                     style: TextStyle(
                       fontSize: 15,
                     ),

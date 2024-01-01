@@ -4,7 +4,7 @@ import '../../services/create-knowledge-service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:kms_esaunggul/services/get-user-service.dart';
+import '../../services/get-user-service.dart';
 
 class CreateKnowledge extends StatefulWidget {
   @override
