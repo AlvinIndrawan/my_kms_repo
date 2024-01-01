@@ -22,30 +22,168 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    Widget selected_widget_type;
+    if (selectedOptionCategory == 'Project Base' ||
+        selectedOptionCategory == 'Modul Kuliah') {
+      selected_widget_type = Container(
+        width: (MediaQuery.of(context).size.width - 30) / 2,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: DropdownButton<String>(
+          value: selectedOptionMatkul,
+          onChanged: (newValue) {
+            setState(() {
+              selectedOptionMatkul = newValue!;
+            });
+          },
+          items: [
+            'Semua',
+            'Pemrograman Web',
+            'Algoritma',
+            'Pemrograman Mobile',
+            'Pemrograman Berorientasi Objek'
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          isExpanded: true,
+          underline: Container(),
+        ),
+      );
+    } else if (selectedOptionCategory == 'Informasi') {
+      selected_widget_type = Container(
+        width: (MediaQuery.of(context).size.width - 30) / 2,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: DropdownButton<String>(
+          value: selectedOptionMatkul,
+          onChanged: (newValue) {
+            setState(() {
+              selectedOptionMatkul = newValue!;
+            });
+          },
+          items: [
+            'Semua',
+            'Perkuliahan',
+            'Lab',
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          isExpanded: true,
+          underline: Container(),
+        ),
+      );
+    } else if (selectedOptionCategory == 'Helpdesk') {
+      selected_widget_type = Container(
+        width: (MediaQuery.of(context).size.width - 30) / 2,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: DropdownButton<String>(
+          value: selectedOptionMatkul,
+          onChanged: (newValue) {
+            setState(() {
+              selectedOptionMatkul = newValue!;
+            });
+          },
+          items: [
+            'Semua',
+            'Software',
+            'Koneksi Internet',
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          isExpanded: true,
+          underline: Container(),
+        ),
+      );
+    } else {
+      selected_widget_type = SizedBox();
+    }
+
     return ListView(
       padding: EdgeInsets.all(15),
       children: [
-        TextField(
-          controller: searchEditingController,
-          decoration: InputDecoration(
-            suffixIcon: Icon(Icons.search),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
+        Row(
+          children: [
+            Container(
+              width: (MediaQuery.of(context).size.width - 30) * 0.8,
+              child: TextField(
+                controller: searchEditingController,
+                decoration: InputDecoration(
+                  // suffixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  hintText: 'Cari Knowledge..',
+                ),
+              ),
             ),
-            hintText: 'Cari Knowledge..',
-          ),
-          onEditingComplete: () async {
-            if (searchEditingController.text.isEmpty) {
-              already_search = false;
-              setState(() {});
-            } else {
-              data =
-                  await getAllDataFromFirestore(searchEditingController.text);
-              jumlah_data = data.length;
-              already_search = true;
-              setState(() {});
-            }
-          },
+            Container(
+              width: (MediaQuery.of(context).size.width - 30) * 0.2,
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (searchEditingController.text.isEmpty) {
+                    already_search = false;
+                    setState(() {});
+                  } else {
+                    data = await getAllDataFromFirestore(
+                        searchEditingController.text,
+                        selectedOptionCategory,
+                        selectedOptionMatkul);
+                    jumlah_data = data.length;
+                    already_search = true;
+                    setState(() {});
+                  }
+                },
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.symmetric(vertical: 20), // Set the padding here
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(4), // Set the radius here
+                    ),
+                  ),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
+                ),
+              ),
+            )
+          ],
         ),
         SizedBox(
           height: 15,
@@ -68,6 +206,7 @@ class _SearchState extends State<Search> {
                 onChanged: (newValue) {
                   setState(() {
                     selectedOptionCategory = newValue!;
+                    selectedOptionMatkul = 'Semua';
                   });
                 },
                 items: ['Project Base', 'Modul Kuliah', 'Informasi', 'Helpdesk']
@@ -81,39 +220,7 @@ class _SearchState extends State<Search> {
                 underline: Container(),
               ),
             ),
-            Container(
-              width: (MediaQuery.of(context).size.width - 30) / 2,
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1.0,
-                  style: BorderStyle.solid,
-                ),
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: DropdownButton<String>(
-                value: selectedOptionMatkul,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedOptionMatkul = newValue!;
-                  });
-                },
-                items: [
-                  'Semua',
-                  'Pemrograman Web',
-                  'Algoritma',
-                  'Pemrograman Mobile'
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                isExpanded: true,
-                underline: Container(),
-              ),
-            ),
+            selected_widget_type,
           ],
         ),
         SizedBox(
