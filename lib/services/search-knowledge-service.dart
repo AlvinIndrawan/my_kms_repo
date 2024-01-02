@@ -49,6 +49,12 @@ Future<List<Object>> getAllDataFromFirestore(
     List<Map<String, dynamic>> documents = querySnapshot.docs
         .map((DocumentSnapshot doc) => doc.data() as Map<String, dynamic>)
         .toList();
+
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      documents[i]['document id'] = querySnapshot.docs[i].id;
+      print(querySnapshot.docs[i].id);
+      print(documents[i]);
+    }
     return documents;
   } catch (error) {
     print('Error fetching data: $error');

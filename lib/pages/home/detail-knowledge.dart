@@ -1,30 +1,41 @@
 // import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:permission_handler/permission_handler.dart';
+import '../../services/get-user-service.dart';
+import '../../services/comment-knowledge-service.dart';
 
-class DetailKnowledge extends StatelessWidget {
+class DetailKnowledge extends StatefulWidget {
+  final String document_id;
   final String title;
   final String type;
   final String category;
   final String author;
+  final String email_author;
   final String image_cover;
   final String penjelasan;
   final String attachment_file;
   final String attachment_file_name;
 
   DetailKnowledge(
-      {required this.title,
+      {required this.document_id,
+      required this.title,
       required this.type,
       required this.category,
       required this.author,
+      required this.email_author,
       required this.image_cover,
       required this.penjelasan,
       required this.attachment_file,
       required this.attachment_file_name});
+
+  @override
+  _DetailKnowledgeState createState() => _DetailKnowledgeState();
+}
+
+class _DetailKnowledgeState extends State<DetailKnowledge> {
+  // Deklarasikan variabel state di sini
+
+  TextEditingController commentEditingController = TextEditingController();
 
   String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
@@ -51,56 +62,24 @@ class DetailKnowledge extends StatelessWidget {
     });
   }
 
-  // Future<void> _downloadFileHTTP(String url, String fileName) async {
-  //   final response = await http.get(Uri.parse(url));
+  var user;
 
-  //   if (response.statusCode == 200) {
-  //     final directory = '/storage/emulated/0/Download';
-  //     final filePath =
-  //         '${directory}/${fileName}'; // Replace with your desired file name
-
-  //     final File file = File(filePath);
-  //     await file.writeAsBytes(response.bodyBytes);
-
-  //     // You can now use the 'file' variable to get information about the downloaded file
-  //     print('File downloaded to: $filePath');
-  //   } else {
-  //     // Handle the error
-  //     print('Failed to download file. Status code: ${response.statusCode}');
-  //   }
-  // }
-
-  // Future<void> downloadFileFirebase(
-  //     String storagePath, String localPath) async {
-  //   final storageRef = FirebaseStorage.instance.ref();
-  //   final islandRef = storageRef
-  //       .child("knowledge_files/1703850566679_LOA Peserta MSIB 5 (313).pdf");
-
-  //   final fileName = 'downloaded ' + localPath;
-  //   final filePath = "/storage/emulated/0/Download/$fileName";
-  //   final file = File(filePath);
-
-  //   final downloadTask = islandRef.writeToFile(file);
-  //   downloadTask.snapshotEvents.listen((taskSnapshot) {
-  //     switch (taskSnapshot.state) {
-  //       case TaskState.running:
-  //         // TODO: Handle this case.
-  //         break;
-  //       case TaskState.paused:
-  //         // TODO: Handle this case.
-  //         break;
-  //       case TaskState.success:
-  //         print('Download success');
-  //         break;
-  //       case TaskState.canceled:
-  //         // TODO: Handle this case.
-  //         break;
-  //       case TaskState.error:
-  //         print('ERROR: Download failed');
-  //         break;
-  //     }
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    Future<String> user_email = getEmailUser();
+    user_email.then((value) async {
+      var data_user = getDataUserByEmail(value);
+      data_user.then((value) {
+        setState(() {
+          user = value;
+        });
+        print('cek data : $value');
+        print(widget.document_id);
+        getCommentKnowledge();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,21 +104,21 @@ class DetailKnowledge extends StatelessWidget {
         padding: EdgeInsets.all(15),
         children: [
           Text(
-            title,
+            widget.title,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 10),
-          (image_cover == '')
+          (widget.image_cover == '')
               ? Image.asset(
                   'assets/images/image background default.jpg',
                   fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
                 )
               : Image.network(
-                  image_cover,
+                  widget.image_cover,
                   fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
                   loadingBuilder: (BuildContext context, Widget child,
@@ -170,7 +149,7 @@ class DetailKnowledge extends StatelessWidget {
                 ),
               ),
               Text(
-                type,
+                widget.type,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -179,7 +158,7 @@ class DetailKnowledge extends StatelessWidget {
           ),
           Row(
             children: [
-              (type == 'Project Base' || type == 'Modul Kuliah')
+              (widget.type == 'Project Base' || widget.type == 'Modul Kuliah')
                   ? Text(
                       'Mata Kuliah : ',
                       style: TextStyle(
@@ -193,7 +172,7 @@ class DetailKnowledge extends StatelessWidget {
                       ),
                     ),
               Text(
-                category,
+                widget.category,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -209,7 +188,7 @@ class DetailKnowledge extends StatelessWidget {
                 ),
               ),
               Text(
-                author,
+                widget.author,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -220,13 +199,13 @@ class DetailKnowledge extends StatelessWidget {
             height: 30,
           ),
           Text(
-            penjelasan,
+            widget.penjelasan,
             textAlign: TextAlign.justify,
           ),
           SizedBox(
             height: 30,
           ),
-          (attachment_file == '' || attachment_file_name == '')
+          (widget.attachment_file == '' || widget.attachment_file_name == '')
               ? SizedBox()
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,9 +220,8 @@ class DetailKnowledge extends StatelessWidget {
                     SizedBox(height: 5),
                     InkWell(
                       onTap: () {
-                        downloadFile(attachment_file, attachment_file_name);
-                        // _downloadFileHTTP(attachment_file, attachment_file_name);
-                        // downloadFileFirebase(attachment_file, attachment_file_name);
+                        downloadFile(widget.attachment_file,
+                            widget.attachment_file_name);
                       },
                       child: Container(
                         padding: EdgeInsets.all(15),
@@ -264,7 +242,7 @@ class DetailKnowledge extends StatelessWidget {
                             ),
                             SizedBox(width: 10),
                             Text(
-                              truncateText(attachment_file_name, 30),
+                              truncateText(widget.attachment_file_name, 30),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(
@@ -291,16 +269,97 @@ class DetailKnowledge extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          TextField(
-            decoration: InputDecoration(
-              suffixIcon: Icon(Icons.send),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-              hintText: 'Tulis komentar..',
-            ),
-          ),
-          SizedBox(height: 10),
+          (user != null)
+              ? (widget.email_author != user['email'])
+                  ? Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: (MediaQuery.of(context).size.width - 30) *
+                                  0.8,
+                              child: TextField(
+                                controller: commentEditingController,
+                                maxLines: 4,
+                                minLines: 1,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                  ),
+                                  hintText: 'Tulis komentar..',
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: (MediaQuery.of(context).size.width - 30) *
+                                  0.2,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  //Cek komentar kosong atau tidak
+                                  if (commentEditingController.text == '') {
+                                    print('Tidak ada komentar');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text('Tidak ada komentar'),
+                                      ),
+                                    );
+                                  } else {
+                                    Future<String> req_message =
+                                        commentKnowledge(
+                                            widget.document_id,
+                                            user['nama'],
+                                            user['email'],
+                                            commentEditingController.text);
+                                    req_message.then((value) {
+                                      String message = value;
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: (message ==
+                                                  'Komentar berhasil dikirim')
+                                              ? Colors.green
+                                              : Colors.red,
+                                          content: Text(message),
+                                        ),
+                                      );
+                                    });
+                                    setState(() {
+                                      commentEditingController.text = '';
+                                    });
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.send,
+                                  color: Colors.white,
+                                ),
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all<
+                                      EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                        vertical: 20), // Set the padding here
+                                  ),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          4), // Set the radius here
+                                    ),
+                                  ),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.black),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 10)
+                      ],
+                    )
+                  : SizedBox()
+              : SizedBox(),
           Comment(),
           Comment(),
         ],

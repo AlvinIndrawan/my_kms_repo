@@ -278,12 +278,12 @@ class _HomeState extends State<Home> {
               ),
             ),
             Spacer(),
-            Text(
-              'View All',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
+            // Text(
+            //   'View All',
+            //   style: TextStyle(
+            //     fontSize: 15,
+            //   ),
+            // ),
           ],
         ),
         SizedBox(

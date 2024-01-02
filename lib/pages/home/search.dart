@@ -231,10 +231,12 @@ class _SearchState extends State<Search> {
                 ? Column(
                     children: data
                         .map<Widget>((knowledge) => CustomCard(
+                              document_id: knowledge['document id'],
                               title: knowledge['title'],
                               type: knowledge['type'],
                               category: knowledge['category'],
                               author: knowledge['nama author'],
+                              email_author: knowledge['email author'],
                               image_cover: knowledge['image cover'],
                               penjelasan: knowledge['penjelasan'],
                               attachment_file: knowledge['attachment file'],
@@ -269,20 +271,24 @@ class _SearchState extends State<Search> {
 //CUSTOM WIDGET
 
 class CustomCard extends StatelessWidget {
+  final String document_id;
   final String title;
   final String type;
   final String category;
   final String author;
+  final String email_author;
   final String image_cover;
   final String penjelasan;
   final String attachment_file;
   final String attachment_file_name;
 
   CustomCard(
-      {required this.title,
+      {required this.document_id,
+      required this.title,
       required this.type,
       required this.category,
       required this.author,
+      required this.email_author,
       required this.image_cover,
       required this.penjelasan,
       required this.attachment_file,
@@ -297,10 +303,12 @@ class CustomCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => DetailKnowledge(
+                    document_id: document_id,
                     title: title,
                     type: type,
                     category: category,
                     author: author,
+                    email_author: email_author,
                     image_cover: image_cover,
                     penjelasan: penjelasan,
                     attachment_file: attachment_file,
