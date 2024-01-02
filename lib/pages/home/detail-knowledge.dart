@@ -65,7 +65,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
   }
 
   var user;
-  var comment;
+  var comments;
   int jumlah_comment = 0;
   bool already_get_comment = false;
   String komen_email_yang_dibalas = '';
@@ -83,9 +83,9 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
         });
         print('cek data : $value');
         print(widget.document_id);
-        comment =
+        comments =
             await getCommentKnowledge(knowledgeDocument: widget.document_id);
-        jumlah_comment = comment.length;
+        jumlah_comment = comments.length;
         already_get_comment = true;
         setState(() {});
         print(jumlah_comment);
@@ -340,9 +340,9 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                     setState(() {
                                       commentEditingController.text = '';
                                     });
-                                    comment = await getCommentKnowledge(
+                                    comments = await getCommentKnowledge(
                                         knowledgeDocument: widget.document_id);
-                                    jumlah_comment = comment.length;
+                                    jumlah_comment = comments.length;
                                     already_get_comment = true;
                                     setState(() {});
                                   }
@@ -381,7 +381,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
               ? (jumlah_comment > 0)
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: comment
+                      children: comments
                           .map<Widget>((comment) =>
                               // Comment(
                               //       document_id: comment['document id'],
@@ -525,9 +525,8 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                                         ),
                                                       );
                                                     } else {
-                                                      Future<String>
-                                                          req_message =
-                                                          replyComment(
+                                                      String req_message =
+                                                          await replyComment(
                                                               knowledgeDocumentId:
                                                                   widget
                                                                       .document_id,
@@ -541,24 +540,60 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
 
                                                             // Add more fields as needed
                                                           });
-                                                      req_message.then((value) {
-                                                        String message = value;
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            backgroundColor:
-                                                                (message ==
-                                                                        'Balasan komentar berhasil dikirim')
-                                                                    ? Colors
-                                                                        .green
-                                                                    : Colors
-                                                                        .red,
-                                                            content:
-                                                                Text(message),
-                                                          ),
-                                                        );
-                                                      });
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          backgroundColor:
+                                                              (req_message ==
+                                                                      'Balasan komentar berhasil dikirim')
+                                                                  ? Colors.green
+                                                                  : Colors.red,
+                                                          content:
+                                                              Text(req_message),
+                                                        ),
+                                                      );
+                                                      // Navigator.pushReplacement(
+                                                      //   context,
+                                                      //   MaterialPageRoute(
+                                                      //       builder: (context) =>
+                                                      //           DetailKnowledge(
+                                                      //             attachment_file:
+                                                      //                 widget
+                                                      //                     .attachment_file,
+                                                      //             attachment_file_name:
+                                                      //                 widget
+                                                      //                     .attachment_file_name,
+                                                      //             author: widget
+                                                      //                 .author,
+                                                      //             category: widget
+                                                      //                 .category,
+                                                      //             document_id:
+                                                      //                 widget
+                                                      //                     .document_id,
+                                                      //             email_author:
+                                                      //                 widget
+                                                      //                     .email_author,
+                                                      //             image_cover:
+                                                      //                 widget
+                                                      //                     .image_cover,
+                                                      //             penjelasan: widget
+                                                      //                 .penjelasan,
+                                                      //             title: widget
+                                                      //                 .title,
+                                                      //             type: widget
+                                                      //                 .type,
+                                                      //           )),
+                                                      // );
+                                                      comments =
+                                                          await getCommentKnowledge(
+                                                              knowledgeDocument:
+                                                                  widget
+                                                                      .document_id);
+                                                      jumlah_comment =
+                                                          comments.length;
+                                                      already_get_comment =
+                                                          true;
                                                       setState(() {
                                                         replyEditingController
                                                             .text = '';
@@ -569,17 +604,8 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                                         komen_email_yang_dibalas =
                                                             '';
                                                       });
-                                                      comment =
-                                                          await getCommentKnowledge(
-                                                              knowledgeDocument:
-                                                                  widget
-                                                                      .document_id);
-                                                      jumlah_comment =
-                                                          comment.length;
-                                                      already_get_comment =
-                                                          true;
 
-                                                      setState(() {});
+                                                      // setState(() {});
                                                     }
                                                   },
                                                   child: Icon(
