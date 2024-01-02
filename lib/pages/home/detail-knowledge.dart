@@ -36,6 +36,8 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
   // Deklarasikan variabel state di sini
 
   TextEditingController commentEditingController = TextEditingController();
+  TextEditingController replyEditingController = TextEditingController();
+  bool button_reply_clicked = false;
 
   String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
@@ -66,6 +68,8 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
   var comment;
   int jumlah_comment = 0;
   bool already_get_comment = false;
+  String komen_email_yang_dibalas = '';
+  String komen_pesan_yang_dibalas = '';
 
   @override
   void initState() {
@@ -378,10 +382,270 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: comment
-                          .map<Widget>((comment) => Comment(
-                                document_id: comment['document id'],
-                                name: comment['nama'],
-                                message: comment['comment'],
+                          .map<Widget>((comment) =>
+                              // Comment(
+                              //       document_id: comment['document id'],
+                              //       name: comment['nama'],
+                              //       message: comment['comment'],
+                              //       author_email: widget.email_author,
+                              //       user_email: user['email'],
+                              //       button_reply_clicked: false,
+                              //     )
+                              Container(
+                                margin: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.all(15),
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffdedede),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1.0,
+                                    style: BorderStyle.solid,
+                                  ),
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      comment['nama'],
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      comment['comment'],
+                                      textAlign: TextAlign.justify,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    (widget.email_author == user['email'] &&
+                                            comment['reply'] == '')
+                                        ? Row(
+                                            children: [
+                                              Spacer(),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    if (button_reply_clicked) {
+                                                      button_reply_clicked =
+                                                          false;
+                                                      komen_pesan_yang_dibalas =
+                                                          '';
+                                                      komen_email_yang_dibalas =
+                                                          '';
+                                                    } else {
+                                                      button_reply_clicked =
+                                                          true;
+                                                      komen_pesan_yang_dibalas =
+                                                          comment['comment'];
+                                                      komen_email_yang_dibalas =
+                                                          comment['email'];
+                                                    }
+                                                    setState(() {});
+                                                  },
+                                                  style: ButtonStyle(
+                                                    padding:
+                                                        MaterialStateProperty.all<
+                                                            EdgeInsetsGeometry>(
+                                                      EdgeInsets.all(
+                                                          0), // Set the padding here
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    (button_reply_clicked ==
+                                                                true &&
+                                                            komen_pesan_yang_dibalas ==
+                                                                comment[
+                                                                    'comment'] &&
+                                                            komen_email_yang_dibalas ==
+                                                                comment[
+                                                                    'email'])
+                                                        ? 'Cancel'
+                                                        : 'Reply',
+                                                    textAlign: TextAlign.end,
+                                                  ))
+                                            ],
+                                          )
+                                        : SizedBox(),
+                                    (button_reply_clicked &&
+                                            komen_pesan_yang_dibalas ==
+                                                comment['comment'] &&
+                                            komen_email_yang_dibalas ==
+                                                comment['email'])
+                                        ? Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: (MediaQuery.of(context)
+                                                            .size
+                                                            .width -
+                                                        65) *
+                                                    0.8,
+                                                child: TextField(
+                                                  controller:
+                                                      replyEditingController,
+                                                  maxLines: 4,
+                                                  minLines: 1,
+                                                  decoration: InputDecoration(
+                                                    border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.black),
+                                                    ),
+                                                    hintText:
+                                                        'Tulis balasan komentar..',
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: (MediaQuery.of(context)
+                                                            .size
+                                                            .width -
+                                                        65) *
+                                                    0.2,
+                                                child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    //Cek komentar kosong atau tidak
+                                                    if (replyEditingController
+                                                            .text ==
+                                                        '') {
+                                                      print(
+                                                          'Tidak ada komentar');
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          content: Text(
+                                                              'Tidak ada balasan komentar'),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      Future<String>
+                                                          req_message =
+                                                          replyComment(
+                                                              knowledgeDocumentId:
+                                                                  widget
+                                                                      .document_id,
+                                                              commentDocumentId:
+                                                                  comment[
+                                                                      'document id'],
+                                                              updatedData: {
+                                                            'reply':
+                                                                replyEditingController
+                                                                    .text,
+
+                                                            // Add more fields as needed
+                                                          });
+                                                      req_message.then((value) {
+                                                        String message = value;
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            backgroundColor:
+                                                                (message ==
+                                                                        'Balasan komentar berhasil dikirim')
+                                                                    ? Colors
+                                                                        .green
+                                                                    : Colors
+                                                                        .red,
+                                                            content:
+                                                                Text(message),
+                                                          ),
+                                                        );
+                                                      });
+                                                      setState(() {
+                                                        replyEditingController
+                                                            .text = '';
+                                                        button_reply_clicked =
+                                                            false;
+                                                        komen_pesan_yang_dibalas =
+                                                            '';
+                                                        komen_email_yang_dibalas =
+                                                            '';
+                                                      });
+                                                      comment =
+                                                          await getCommentKnowledge(
+                                                              knowledgeDocument:
+                                                                  widget
+                                                                      .document_id);
+                                                      jumlah_comment =
+                                                          comment.length;
+                                                      already_get_comment =
+                                                          true;
+
+                                                      setState(() {});
+                                                    }
+                                                  },
+                                                  child: Icon(
+                                                    Icons.send,
+                                                    color: Colors.white,
+                                                  ),
+                                                  style: ButtonStyle(
+                                                    padding:
+                                                        MaterialStateProperty.all<
+                                                            EdgeInsetsGeometry>(
+                                                      EdgeInsets.symmetric(
+                                                          vertical:
+                                                              20), // Set the padding here
+                                                    ),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                4), // Set the radius here
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all<Color>(
+                                                                Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        : SizedBox(),
+                                    (comment['reply'] != '')
+                                        ? Row(
+                                            children: [
+                                              Spacer(),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  SizedBox(height: 20),
+                                                  Text(
+                                                    widget.author + ' (Author)',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                  Text(
+                                                    comment['reply'],
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        : SizedBox()
+                                  ],
+                                ),
                               ))
                           .toList(),
                     )
@@ -398,11 +662,17 @@ class Comment extends StatelessWidget {
   final String document_id;
   final String name;
   final String message;
+  final String author_email;
+  final String user_email;
+  late final bool button_reply_clicked;
 
   Comment({
     required this.document_id,
     required this.name,
     required this.message,
+    required this.author_email,
+    required this.user_email,
+    required this.button_reply_clicked,
   });
 
   @override
@@ -438,6 +708,27 @@ class Comment extends StatelessWidget {
               fontSize: 15,
             ),
           ),
+          (author_email == user_email)
+              ? Row(
+                  children: [
+                    Spacer(),
+                    TextButton(
+                        onPressed: () {
+                          button_reply_clicked = true;
+                        },
+                        style: ButtonStyle(
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.all(0), // Set the padding here
+                          ),
+                        ),
+                        child: Text(
+                          'Reply',
+                          textAlign: TextAlign.end,
+                        ))
+                  ],
+                )
+              : SizedBox()
         ],
       ),
     );

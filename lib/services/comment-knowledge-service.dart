@@ -57,3 +57,34 @@ Future<List<Map<String, dynamic>>> getCommentKnowledge({
     rethrow;
   }
 }
+
+Future<String> replyComment({
+  required String knowledgeDocumentId,
+  required String commentDocumentId,
+  required Map<String, dynamic> updatedData,
+}) async {
+  try {
+    // Reference the parent document
+    DocumentReference parentDocumentRef = FirebaseFirestore.instance
+        .collection('knowledge')
+        .doc(knowledgeDocumentId);
+
+    // Reference the nested collection within the parent document
+    CollectionReference nestedCollectionRef =
+        parentDocumentRef.collection('comment');
+
+    // Reference the specific document within the nested collection
+    DocumentReference nestedDocumentRef =
+        nestedCollectionRef.doc(commentDocumentId);
+
+    // Update the data in the nested document
+    await nestedDocumentRef.update(updatedData);
+
+    print('Document updated successfully!');
+    return 'Balasan komentar berhasil dikirim';
+  } catch (e) {
+    print('Error updating document: $e');
+    return '$e';
+    // Handle the error as needed
+  }
+}
