@@ -63,6 +63,9 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
   }
 
   var user;
+  var comment;
+  int jumlah_comment = 0;
+  bool already_get_comment = false;
 
   @override
   void initState() {
@@ -70,13 +73,18 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
     Future<String> user_email = getEmailUser();
     user_email.then((value) async {
       var data_user = getDataUserByEmail(value);
-      data_user.then((value) {
+      data_user.then((value) async {
         setState(() {
           user = value;
         });
         print('cek data : $value');
         print(widget.document_id);
-        getCommentKnowledge();
+        comment =
+            await getCommentKnowledge(knowledgeDocument: widget.document_id);
+        jumlah_comment = comment.length;
+        already_get_comment = true;
+        setState(() {});
+        print(jumlah_comment);
       });
     });
   }
@@ -295,7 +303,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                               width: (MediaQuery.of(context).size.width - 30) *
                                   0.2,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   //Cek komentar kosong atau tidak
                                   if (commentEditingController.text == '') {
                                     print('Tidak ada komentar');
@@ -328,6 +336,11 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                     setState(() {
                                       commentEditingController.text = '';
                                     });
+                                    comment = await getCommentKnowledge(
+                                        knowledgeDocument: widget.document_id);
+                                    jumlah_comment = comment.length;
+                                    already_get_comment = true;
+                                    setState(() {});
                                   }
                                 },
                                 child: Icon(
@@ -360,8 +373,20 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                     )
                   : SizedBox()
               : SizedBox(),
-          Comment(),
-          Comment(),
+          (already_get_comment)
+              ? (jumlah_comment > 0)
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: comment
+                          .map<Widget>((comment) => Comment(
+                                document_id: comment['document id'],
+                                name: comment['nama'],
+                                message: comment['comment'],
+                              ))
+                          .toList(),
+                    )
+                  : SizedBox()
+              : SizedBox()
         ],
       ),
     );
@@ -370,11 +395,22 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
 
 //CUSTOM WIDGET
 class Comment extends StatelessWidget {
+  final String document_id;
+  final String name;
+  final String message;
+
+  Comment({
+    required this.document_id,
+    required this.name,
+    required this.message,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.all(15),
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Color(0xffdedede),
         border: Border.all(
@@ -388,7 +424,7 @@ class Comment extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Nama User',
+            name,
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -396,7 +432,7 @@ class Comment extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tortor id aliquet lectus proin nibh nisl condimentum id.',
+            message,
             textAlign: TextAlign.justify,
             style: TextStyle(
               fontSize: 15,

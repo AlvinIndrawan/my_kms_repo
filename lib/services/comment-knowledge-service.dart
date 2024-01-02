@@ -31,25 +31,29 @@ Future<String> commentKnowledge(
   }
 }
 
-void getCommentKnowledge() async {
+Future<List<Map<String, dynamic>>> getCommentKnowledge({
+  required String knowledgeDocument,
+}) async {
   try {
-    // Replace 'your_collection' with the name of your collection
-    // Replace 'your_document_id' with the ID of the document that contains the collection
-    // Replace 'your_subcollection' with the name of the subcollection
+    // Replace 'knowledge' with the name of your collection
+    // Replace 'comment' with the name of the subcollection
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('knowledge')
-        .doc('IGlS7VZUc1lIrZ2cY8kV')
+        .doc(knowledgeDocument)
         .collection('comment')
         .get();
 
-    // Process the documents in the collection
-    querySnapshot.docs.forEach((DocumentSnapshot document) {
-      // Access data from each document
-      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-      print('Document ID: ${document.id}, Data: $data');
-      print(querySnapshot.docs.length);
-    });
+    List<Map<String, dynamic>> comments =
+        querySnapshot.docs.map((DocumentSnapshot document) {
+      Map<String, dynamic> commentData =
+          document.data() as Map<String, dynamic>;
+      commentData['document id'] = document.id;
+      return commentData;
+    }).toList();
+
+    return comments;
   } catch (e) {
     print('Error fetching collection: $e');
+    rethrow;
   }
 }
