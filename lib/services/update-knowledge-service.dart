@@ -50,3 +50,23 @@ Future<String> updateKnowledge(
     return "Failed to edit knowledge: $error";
   }
 }
+
+Future<void> updateNotification({required String document_id}) async {
+  try {
+    // Replace 'your_collection' with the name of your collection
+    // Replace 'your_document_id' with the ID of the document you want to update
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection('knowledge').doc(document_id);
+
+    // Replace 'field1', 'field2', etc. with the fields you want to update
+    // Replace 'new_value1', 'new_value2', etc. with the new values
+    await docRef.update({
+      'notification': true
+      // Add more fields as needed
+    });
+
+    print("Knowledge Added");
+  } catch (error) {
+    print("Failed to add knowledge: $error");
+  }
+}

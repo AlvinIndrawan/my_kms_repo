@@ -31,7 +31,8 @@ Future<String> createKnowledge(
       'attachment file': attachment_file,
       'attachment file name': attachment_file_name,
       'nama author': author_name,
-      'email author': author_email
+      'email author': author_email,
+      'notification': false,
     });
 
     print("Knowledge Added");

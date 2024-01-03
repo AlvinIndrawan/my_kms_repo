@@ -124,6 +124,8 @@ class _MyknowledgeState extends State<Myknowledge>
                                         penjelasan: documents[index]
                                                 ['penjelasan']
                                             .toString(),
+                                        notification: documents[index]
+                                            ['notification'],
                                       );
                                     },
                                   )
@@ -191,6 +193,8 @@ class _MyknowledgeState extends State<Myknowledge>
                                         penjelasan: documents[index]
                                                 ['penjelasan']
                                             .toString(),
+                                        notification: documents[index]
+                                            ['notification'],
                                       );
                                     },
                                   )
@@ -227,6 +231,7 @@ class CustomCard extends StatelessWidget {
   final String penjelasan;
   final String attachment_file;
   final String attachment_file_name;
+  final bool notification;
 
   CustomCard(
       {required this.document_id,
@@ -239,7 +244,8 @@ class CustomCard extends StatelessWidget {
       required this.email_author,
       required this.penjelasan,
       required this.attachment_file,
-      required this.attachment_file_name});
+      required this.attachment_file_name,
+      required this.notification});
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +347,37 @@ class CustomCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  (notification)
+                      ? Container(
+                          width: ((MediaQuery.of(context).size.width - 30) *
+                                  0.65) -
+                              20,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.notifications,
+                                color: Colors.red,
+                              ),
+                              Text(
+                                'Ada komentar baru',
+                              )
+                            ],
+                          ))
+                      : Container(
+                          width: ((MediaQuery.of(context).size.width - 30) *
+                                  0.65) -
+                              20,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.notifications,
+                                color: Colors.grey,
+                              ),
+                              Text(
+                                'Tidak ada komentar baru',
+                              )
+                            ],
+                          )),
                 ],
               ),
             ),

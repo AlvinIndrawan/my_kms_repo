@@ -4,6 +4,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import '../../services/delete-knowledge-service.dart';
 import '../../services/get-user-service.dart';
 import '../../services/comment-knowledge-service.dart';
+import '../../services/update-knowledge-service.dart';
 import 'edit-knowledge.dart';
 import 'homepage.dart';
 
@@ -438,6 +439,8 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                             user['nama'],
                                             user['email'],
                                             commentEditingController.text);
+                                    updateNotification(
+                                        document_id: widget.document_id);
                                     req_message.then((value) {
                                       String message = value;
                                       ScaffoldMessenger.of(context)
