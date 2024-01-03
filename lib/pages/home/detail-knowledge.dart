@@ -82,6 +82,9 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
     super.initState();
     Future<String> user_email = getEmailUser();
     user_email.then((value) async {
+      if (widget.email_author == value) {
+        nonActivateNotification(document_id: widget.document_id);
+      }
       var data_user = getDataUserByEmail(value);
       data_user.then((value) async {
         setState(() {
@@ -439,7 +442,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                             user['nama'],
                                             user['email'],
                                             commentEditingController.text);
-                                    updateNotification(
+                                    activateNotification(
                                         document_id: widget.document_id);
                                     req_message.then((value) {
                                       String message = value;
