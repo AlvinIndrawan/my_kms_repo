@@ -9,6 +9,7 @@ import 'edit-knowledge.dart';
 import 'homepage.dart';
 
 class DetailKnowledge extends StatefulWidget {
+  final String previous_page;
   final String document_id;
   final String title;
   final String type;
@@ -22,7 +23,8 @@ class DetailKnowledge extends StatefulWidget {
   final String attachment_file_name;
 
   DetailKnowledge(
-      {required this.document_id,
+      {required this.previous_page,
+      required this.document_id,
       required this.title,
       required this.type,
       required this.category,
@@ -117,7 +119,21 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
           onPressed: () {
             // Navigate back to the previous screen
-            Navigator.pop(context);
+            if (widget.previous_page == 'search') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Homepage(index_start: 1)),
+              );
+            } else if (widget.previous_page == 'myknowledge') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Homepage(index_start: 3)),
+              );
+            } else {
+              Navigator.pop(context);
+            }
           },
         ),
       ),
