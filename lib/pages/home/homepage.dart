@@ -6,7 +6,9 @@ import 'myknowledge.dart';
 import 'profile.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  final int index_start;
+
+  const Homepage({super.key, required this.index_start});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -22,6 +24,12 @@ class _HomepageState extends State<Homepage> {
   ];
 
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.index_start;
+  }
 
   void _onItemTapped(int index) {
     setState(() {

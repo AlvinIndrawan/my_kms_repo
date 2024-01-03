@@ -161,7 +161,8 @@ class _LoginState extends State<Login> {
                     if (message == 'Berhasil login') {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => Homepage()),
+                        MaterialPageRoute(
+                            builder: (context) => Homepage(index_start: 0)),
                       );
                       // await saveLoginStatus(true);
                     }

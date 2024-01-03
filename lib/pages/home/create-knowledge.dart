@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../services/get-user-service.dart';
+import 'homepage.dart';
 
 class CreateKnowledge extends StatefulWidget {
   @override
@@ -542,6 +543,12 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                                           : Colors.red,
                                       content: Text(message),
                                     ),
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Homepage(index_start: 3)),
                                   );
                                 });
                                 setState(() {
