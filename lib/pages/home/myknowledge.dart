@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/get-user-service.dart';
 import '../../services/get-myknowledge-service.dart';
+import 'detail-knowledge.dart';
 
 class Myknowledge extends StatefulWidget {
   @override
@@ -94,6 +95,9 @@ class _MyknowledgeState extends State<Myknowledge>
                                     itemBuilder: (context, index) {
                                       // Build your UI based on the retrieved data
                                       return CustomCard(
+                                        document_id: documents[index]
+                                                ['document id']
+                                            .toString(),
                                         title: documents[index]['title']
                                             .toString(),
                                         image_cover: documents[index]
@@ -101,6 +105,22 @@ class _MyknowledgeState extends State<Myknowledge>
                                             .toString(),
                                         type:
                                             documents[index]['type'].toString(),
+                                        attachment_file: documents[index]
+                                                ['attachment file']
+                                            .toString(),
+                                        attachment_file_name: documents[index]
+                                                ['attachment file name']
+                                            .toString(),
+                                        author: documents[index]['nama author']
+                                            .toString(),
+                                        category: documents[index]['category']
+                                            .toString(),
+                                        email_author: documents[index]
+                                                ['email author']
+                                            .toString(),
+                                        penjelasan: documents[index]
+                                                ['penjelasan']
+                                            .toString(),
                                       );
                                     },
                                   )
@@ -139,6 +159,9 @@ class _MyknowledgeState extends State<Myknowledge>
                                     itemBuilder: (context, index) {
                                       // Build your UI based on the retrieved data
                                       return CustomCard(
+                                        document_id: documents[index]
+                                                ['document id']
+                                            .toString(),
                                         title: documents[index]['title']
                                             .toString(),
                                         image_cover: documents[index]
@@ -146,6 +169,22 @@ class _MyknowledgeState extends State<Myknowledge>
                                             .toString(),
                                         type:
                                             documents[index]['type'].toString(),
+                                        attachment_file: documents[index]
+                                                ['attachment file']
+                                            .toString(),
+                                        attachment_file_name: documents[index]
+                                                ['attachment file name']
+                                            .toString(),
+                                        author: documents[index]['nama author']
+                                            .toString(),
+                                        category: documents[index]['category']
+                                            .toString(),
+                                        email_author: documents[index]
+                                                ['email author']
+                                            .toString(),
+                                        penjelasan: documents[index]
+                                                ['penjelasan']
+                                            .toString(),
                                       );
                                     },
                                   )
@@ -171,95 +210,133 @@ class _MyknowledgeState extends State<Myknowledge>
 // CUSTOM WIDGET
 
 class CustomCard extends StatelessWidget {
+  final String document_id;
   final String title;
   final String image_cover;
   final String type;
+  final String category;
+  final String author;
+  final String email_author;
+  final String penjelasan;
+  final String attachment_file;
+  final String attachment_file_name;
 
   CustomCard(
-      {required this.title, required this.image_cover, required this.type});
+      {required this.document_id,
+      required this.title,
+      required this.image_cover,
+      required this.type,
+      required this.category,
+      required this.author,
+      required this.email_author,
+      required this.penjelasan,
+      required this.attachment_file,
+      required this.attachment_file_name});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // padding: EdgeInsets.all(15),
-      margin: EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(15.0), // Set container background color
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5), // Set shadow color
-            spreadRadius: 3, // Set the spread radius of the shadow
-            blurRadius: 5, // Set the blur radius of the shadow
-            offset: Offset(0, 3), // Set the offset of the shadow
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              bottomLeft: Radius.circular(15),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DetailKnowledge(
+                    document_id: 'document_id',
+                    title: title,
+                    type: type,
+                    category: category,
+                    author: author,
+                    email_author: email_author,
+                    image_cover: image_cover,
+                    penjelasan: penjelasan,
+                    attachment_file: attachment_file,
+                    attachment_file_name: attachment_file_name,
+                  )),
+        );
+      },
+      child: Container(
+        // padding: EdgeInsets.all(15),
+        margin: EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius:
+              BorderRadius.circular(15.0), // Set container background color
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5), // Set shadow color
+              spreadRadius: 3, // Set the spread radius of the shadow
+              blurRadius: 5, // Set the blur radius of the shadow
+              offset: Offset(0, 3), // Set the offset of the shadow
             ),
-            child: (image_cover == '')
-                ? Image.asset(
-                    'assets/images/image background default.jpg',
-                    fit: BoxFit.cover,
-                    width: (MediaQuery.of(context).size.width - 30) * 0.35,
-                    height: 100,
-                  )
-                : Image.network(
-                    image_cover,
-                    fit: BoxFit.cover,
-                    width: (MediaQuery.of(context).size.width - 30) * 0.35,
-                    height: 100,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    (loadingProgress.expectedTotalBytes ?? 1)
-                                : null,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: ((MediaQuery.of(context).size.width - 30) * 0.65) - 20,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+              ),
+              child: (image_cover == '')
+                  ? Image.asset(
+                      'assets/images/image background default.jpg',
+                      fit: BoxFit.cover,
+                      width: (MediaQuery.of(context).size.width - 30) * 0.35,
+                      height: 100,
+                    )
+                  : Image.network(
+                      image_cover,
+                      fit: BoxFit.cover,
+                      width: (MediaQuery.of(context).size.width - 30) * 0.35,
+                      height: 100,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      (loadingProgress.expectedTotalBytes ?? 1)
+                                  : null,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width:
+                        ((MediaQuery.of(context).size.width - 30) * 0.65) - 20,
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  width: ((MediaQuery.of(context).size.width - 30) * 0.65) - 20,
-                  child: Text(
-                    type,
-                    style: TextStyle(
-                      fontSize: 15,
+                  Container(
+                    width:
+                        ((MediaQuery.of(context).size.width - 30) * 0.65) - 20,
+                    child: Text(
+                      type,
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
