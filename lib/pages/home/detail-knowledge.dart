@@ -1,8 +1,11 @@
 // import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import '../../services/delete-knowledge-service.dart';
 import '../../services/get-user-service.dart';
 import '../../services/comment-knowledge-service.dart';
+import 'edit-knowledge.dart';
+import 'homepage.dart';
 
 class DetailKnowledge extends StatefulWidget {
   final String document_id;
@@ -82,7 +85,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
           user = value;
         });
         print('cek data : $value');
-        print(widget.document_id);
+        print('document id: ' + widget.document_id.toString());
         comments =
             await getCommentKnowledge(knowledgeDocument: widget.document_id);
         jumlah_comment = comments.length;
@@ -120,7 +123,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                   ? Row(
                       children: [
                         Container(
-                          width: (MediaQuery.of(context).size.width - 30) * 0.8,
+                          width: (MediaQuery.of(context).size.width - 30) * 0.7,
                           child: Text(
                             widget.title,
                             style: TextStyle(
@@ -134,7 +137,26 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                           width:
                               (MediaQuery.of(context).size.width - 30) * 0.15,
                           child: ElevatedButton(
-                              onPressed: () async {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditKnowledge(
+                                            document_id: widget.document_id,
+                                            title: widget.title,
+                                            type: widget.type,
+                                            category: widget.category,
+                                            author: widget.author,
+                                            email_author: widget.email_author,
+                                            image_cover: widget.image_cover,
+                                            penjelasan: widget.penjelasan,
+                                            attachment_file:
+                                                widget.attachment_file_name,
+                                            attachment_file_name:
+                                                widget.attachment_file_name,
+                                          )),
+                                );
+                              },
                               child: Icon(
                                 Icons.edit,
                                 color: Colors.white,
@@ -150,6 +172,39 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                   (Set<MaterialState> states) {
                                     return Colors
                                         .black; // Default background color
+                                  },
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        4), // Set the radius here
+                                  ),
+                                ),
+                              )),
+                        ),
+                        Container(
+                          width:
+                              (MediaQuery.of(context).size.width - 30) * 0.15,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                showConfirmationDialog(context);
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  EdgeInsets.symmetric(
+                                      vertical: 15), // Set the padding here
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                    return Colors
+                                        .red; // Default background color
                                   },
                                 ),
                                 shape: MaterialStateProperty.all<
@@ -735,6 +790,62 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
         ],
       ),
     );
+  }
+
+  Future<void> showConfirmationDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Yakin ingin menghapus knowledge ini?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Perform the action when confirmed
+                Navigator.of(context).pop();
+                performAction();
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Dismiss the dialog when canceled
+                Navigator.of(context).pop();
+              },
+              child: Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void performAction() {
+    // Add your action logic here
+    // if (widget.image_cover != '') {
+    //   deleteImage(widget.image_cover);
+    // }
+    if (widget.attachment_file_name != '') {
+      deleteFile(widget.attachment_file_name);
+    }
+    Future<String> req_message =
+        deleteKnowledge(document_id: widget.document_id);
+    req_message.then((value) {
+      String message = value;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: (message == 'Knowledge berhasil di delete')
+              ? Colors.green
+              : Colors.red,
+          content: Text(message),
+        ),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Homepage(index_start: 3)),
+      );
+    });
   }
 }
 

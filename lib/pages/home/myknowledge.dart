@@ -241,7 +241,7 @@ class CustomCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => DetailKnowledge(
-                    document_id: 'document_id',
+                    document_id: document_id,
                     title: title,
                     type: type,
                     category: category,
