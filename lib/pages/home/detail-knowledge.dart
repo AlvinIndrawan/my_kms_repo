@@ -15,6 +15,7 @@ class DetailKnowledge extends StatefulWidget {
   final String author;
   final String email_author;
   final String image_cover;
+  final String image_cover_name;
   final String penjelasan;
   final String attachment_file;
   final String attachment_file_name;
@@ -27,6 +28,7 @@ class DetailKnowledge extends StatefulWidget {
       required this.author,
       required this.email_author,
       required this.image_cover,
+      required this.image_cover_name,
       required this.penjelasan,
       required this.attachment_file,
       required this.attachment_file_name});
@@ -149,6 +151,8 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                             author: widget.author,
                                             email_author: widget.email_author,
                                             image_cover: widget.image_cover,
+                                            image_cover_name:
+                                                widget.image_cover_name,
                                             penjelasan: widget.penjelasan,
                                             attachment_file:
                                                 widget.attachment_file_name,
@@ -823,9 +827,9 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
 
   void performAction() {
     // Add your action logic here
-    // if (widget.image_cover != '') {
-    //   deleteImage(widget.image_cover);
-    // }
+    if (widget.image_cover != '') {
+      deleteImage(widget.image_cover_name);
+    }
     if (widget.attachment_file_name != '') {
       deleteFile(widget.attachment_file_name);
     }

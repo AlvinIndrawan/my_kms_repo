@@ -37,6 +37,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
 
   String attachment_file = '';
   String image_cover = '';
+  String imageName = '';
   File? _selectedImage;
   File? _selectedFile;
   String _selectedFileName = '';
@@ -100,11 +101,11 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
   Future<String> _uploadImage() async {
     if (_selectedImage != null) {
       try {
-        String imageName =
-            'knowledge_images/${DateTime.now().millisecondsSinceEpoch}.png';
+        imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
 
-        UploadTask uploadTask =
-            FirebaseStorage.instance.ref(imageName).putFile(_selectedImage!);
+        UploadTask uploadTask = FirebaseStorage.instance
+            .ref('knowledge_images/$imageName')
+            .putFile(_selectedImage!);
 
         await uploadTask.whenComplete(() => print('Upload complete'));
         final String downloadURL =
@@ -524,6 +525,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                                     title: judulEditingController.text,
                                     category: matkul_atau_kategori,
                                     image_cover: image_cover,
+                                    image_cover_name: imageName,
                                     penjelasan:
                                         penjelasanEditingController.text,
                                     attachment_file: attachment_file,
@@ -644,6 +646,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                                     title: judulEditingController.text,
                                     category: matkul_atau_kategori,
                                     image_cover: image_cover,
+                                    image_cover_name: imageName,
                                     penjelasan:
                                         penjelasanEditingController.text,
                                     attachment_file: attachment_file,
@@ -663,6 +666,12 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                                           : Colors.red,
                                       content: Text(message),
                                     ),
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Homepage(index_start: 3)),
                                   );
                                 });
                                 setState(() {

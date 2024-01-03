@@ -19,21 +19,21 @@ Future<String> deleteKnowledge({required String document_id}) async {
   }
 }
 
-// Future<void> deleteImage(String fileName) async {
-//   try {
-//     // Replace 'your_storage_reference' with the reference to your file in Firebase Storage
-//     Reference storageRef =
-//         FirebaseStorage.instance.ref().child('knowledge_images/$fileName');
+Future<void> deleteImage(String fileName) async {
+  try {
+    // Replace 'your_storage_reference' with the reference to your file in Firebase Storage
+    Reference storageRef =
+        FirebaseStorage.instance.ref().child('knowledge_images/$fileName');
 
-//     // Delete the file
-//     await storageRef.delete();
+    // Delete the file
+    await storageRef.delete();
 
-//     print('Image deleted successfully!');
-//   } catch (e) {
-//     print('Error deleting images: $e');
-//     // Handle the error as needed
-//   }
-// }
+    print('Image deleted successfully!');
+  } catch (e) {
+    print('Error deleting images: $e');
+    // Handle the error as needed
+  }
+}
 
 Future<void> deleteFile(String fileName) async {
   try {

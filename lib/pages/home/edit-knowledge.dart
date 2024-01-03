@@ -4,6 +4,7 @@ import '../../services/create-knowledge-service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import '../../services/delete-knowledge-service.dart';
 import '../../services/get-user-service.dart';
 import '../../services/update-knowledge-service.dart';
 import 'homepage.dart';
@@ -16,6 +17,7 @@ class EditKnowledge extends StatefulWidget {
   final String author;
   final String email_author;
   final String image_cover;
+  final String image_cover_name;
   final String penjelasan;
   final String attachment_file;
   final String attachment_file_name;
@@ -28,6 +30,7 @@ class EditKnowledge extends StatefulWidget {
       required this.author,
       required this.email_author,
       required this.image_cover,
+      required this.image_cover_name,
       required this.penjelasan,
       required this.attachment_file,
       required this.attachment_file_name});
@@ -61,6 +64,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
 
   String attachment_file = '';
   String image_cover = '';
+  String imageName = '';
   File? _selectedImage;
   File? _selectedFile;
   String _selectedFileName = '';
@@ -134,11 +138,11 @@ class _EditKnowledgeState extends State<EditKnowledge> {
   Future<String> _uploadImage() async {
     if (_selectedImage != null) {
       try {
-        String imageName =
-            'knowledge_images/${DateTime.now().millisecondsSinceEpoch}.png';
+        imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
 
-        UploadTask uploadTask =
-            FirebaseStorage.instance.ref(imageName).putFile(_selectedImage!);
+        UploadTask uploadTask = FirebaseStorage.instance
+            .ref('knowledge_images/$imageName')
+            .putFile(_selectedImage!);
 
         await uploadTask.whenComplete(() => print('Upload complete'));
         final String downloadURL =
@@ -595,11 +599,14 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                                         await _uploadImage();
                                     print(imageDownloadUrl);
                                     image_cover = imageDownloadUrl.toString();
+                                    deleteImage(widget.image_cover_name);
                                   } else if (any_image == false &&
                                       image_cover != '') {
                                     image_cover = widget.image_cover;
+                                    imageName = widget.image_cover_name;
                                   } else {
                                     image_cover = '';
+                                    imageName = '';
                                   }
                                   if (any_file == true) {
                                     final String? fileDownloadUrl =
@@ -607,6 +614,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                                     print(fileDownloadUrl);
                                     attachment_file =
                                         fileDownloadUrl.toString();
+                                    deleteFile(widget.attachment_file_name);
                                   } else if (any_file == false &&
                                       attachment_file != '') {
                                     attachment_file =
@@ -622,6 +630,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                                       title: judulEditingController.text,
                                       category: matkul_atau_kategori,
                                       image_cover: image_cover,
+                                      image_cover_name: imageName,
                                       penjelasan:
                                           penjelasanEditingController.text,
                                       attachment_file: attachment_file,
@@ -728,10 +737,13 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                                         await _uploadImage();
                                     print(imageDownloadUrl);
                                     image_cover = imageDownloadUrl.toString();
+                                    deleteImage(widget.image_cover_name);
                                   } else if (image_cover != '') {
                                     image_cover = widget.image_cover;
+                                    imageName = widget.image_cover_name;
                                   } else {
                                     image_cover = '';
+                                    imageName = '';
                                   }
                                   if (any_file == true) {
                                     final String? fileDownloadUrl =
@@ -739,6 +751,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                                     print(fileDownloadUrl);
                                     attachment_file =
                                         fileDownloadUrl.toString();
+                                    deleteFile(widget.attachment_file_name);
                                   } else if (attachment_file != '') {
                                     attachment_file =
                                         widget.attachment_file_name;
@@ -753,6 +766,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                                       title: judulEditingController.text,
                                       category: matkul_atau_kategori,
                                       image_cover: image_cover,
+                                      image_cover_name: imageName,
                                       penjelasan:
                                           penjelasanEditingController.text,
                                       attachment_file: attachment_file,

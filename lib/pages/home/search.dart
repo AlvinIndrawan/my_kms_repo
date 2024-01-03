@@ -238,6 +238,7 @@ class _SearchState extends State<Search> {
                               author: knowledge['nama author'],
                               email_author: knowledge['email author'],
                               image_cover: knowledge['image cover'],
+                              image_cover_name: knowledge['image cover name'],
                               penjelasan: knowledge['penjelasan'],
                               attachment_file: knowledge['attachment file'],
                               attachment_file_name:
@@ -278,6 +279,7 @@ class CustomCard extends StatelessWidget {
   final String author;
   final String email_author;
   final String image_cover;
+  final String image_cover_name;
   final String penjelasan;
   final String attachment_file;
   final String attachment_file_name;
@@ -290,6 +292,7 @@ class CustomCard extends StatelessWidget {
       required this.author,
       required this.email_author,
       required this.image_cover,
+      required this.image_cover_name,
       required this.penjelasan,
       required this.attachment_file,
       required this.attachment_file_name});
@@ -310,6 +313,7 @@ class CustomCard extends StatelessWidget {
                     author: author,
                     email_author: email_author,
                     image_cover: image_cover,
+                    image_cover_name: image_cover_name,
                     penjelasan: penjelasan,
                     attachment_file: attachment_file,
                     attachment_file_name: attachment_file_name,

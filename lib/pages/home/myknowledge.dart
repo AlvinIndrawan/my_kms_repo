@@ -103,6 +103,9 @@ class _MyknowledgeState extends State<Myknowledge>
                                         image_cover: documents[index]
                                                 ['image cover']
                                             .toString(),
+                                        image_cover_name: documents[index]
+                                                ['image cover name']
+                                            .toString(),
                                         type:
                                             documents[index]['type'].toString(),
                                         attachment_file: documents[index]
@@ -167,6 +170,9 @@ class _MyknowledgeState extends State<Myknowledge>
                                         image_cover: documents[index]
                                                 ['image cover']
                                             .toString(),
+                                        image_cover_name: documents[index]
+                                                ['image cover name']
+                                            .toString(),
                                         type:
                                             documents[index]['type'].toString(),
                                         attachment_file: documents[index]
@@ -213,6 +219,7 @@ class CustomCard extends StatelessWidget {
   final String document_id;
   final String title;
   final String image_cover;
+  final String image_cover_name;
   final String type;
   final String category;
   final String author;
@@ -225,6 +232,7 @@ class CustomCard extends StatelessWidget {
       {required this.document_id,
       required this.title,
       required this.image_cover,
+      required this.image_cover_name,
       required this.type,
       required this.category,
       required this.author,
@@ -248,6 +256,7 @@ class CustomCard extends StatelessWidget {
                     author: author,
                     email_author: email_author,
                     image_cover: image_cover,
+                    image_cover_name: image_cover_name,
                     penjelasan: penjelasan,
                     attachment_file: attachment_file,
                     attachment_file_name: attachment_file_name,
