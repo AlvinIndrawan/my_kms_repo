@@ -115,13 +115,68 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
       body: ListView(
         padding: EdgeInsets.all(15),
         children: [
-          Text(
-            widget.title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          (user != null)
+              ? (widget.email_author == user['email'])
+                  ? Row(
+                      children: [
+                        Container(
+                          width: (MediaQuery.of(context).size.width - 30) * 0.8,
+                          child: Text(
+                            widget.title,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                        Container(
+                          width:
+                              (MediaQuery.of(context).size.width - 30) * 0.15,
+                          child: ElevatedButton(
+                              onPressed: () async {},
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  EdgeInsets.symmetric(
+                                      vertical: 15), // Set the padding here
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                    return Colors
+                                        .black; // Default background color
+                                  },
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        4), // Set the radius here
+                                  ),
+                                ),
+                              )),
+                        )
+                      ],
+                    )
+                  : Text(
+                      widget.title,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+              : Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           SizedBox(height: 10),
           (widget.image_cover == '')
               ? Image.asset(
