@@ -47,8 +47,15 @@ class _SearchState extends State<Search> {
             'Semua',
             'Pemrograman Web',
             'Algoritma',
-            'Pemrograman Mobile',
-            'Pemrograman Berorientasi Objek'
+            'Struktur Data',
+            'Desain dan Analisa Algoritma',
+            'Basis Data',
+            'Bahasa Pemograman',
+            'Pemograman Berorientasi Objek',
+            'Jaringan Komputer',
+            'Machine Learning',
+            'Pemograman Mobile',
+            'Jaringan Komputer lanjut dan Lab'
           ].map((String value) {
             return DropdownMenuItem<String>(
               value: value,
