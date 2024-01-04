@@ -198,24 +198,24 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: OutlinedButton(
-                  onPressed: () {
-                    // Insert the code you want to run when the button is pressed
-                  },
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: Text('Change Password')),
-                  style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
-                    side: MaterialStateProperty.all<BorderSide>(
-                      BorderSide(width: 1.0, color: Colors.black),
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   width: MediaQuery.of(context).size.width,
+              //   child: OutlinedButton(
+              //     onPressed: () {
+              //       // Insert the code you want to run when the button is pressed
+              //     },
+              //     child: Padding(
+              //         padding: EdgeInsets.symmetric(vertical: 15),
+              //         child: Text('Change Password')),
+              //     style: ButtonStyle(
+              //       foregroundColor:
+              //           MaterialStateProperty.all<Color>(Colors.black),
+              //       side: MaterialStateProperty.all<BorderSide>(
+              //         BorderSide(width: 1.0, color: Colors.black),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         )

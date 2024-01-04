@@ -362,6 +362,32 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 child: Text(
+                  'Struktur Data',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(15),
+                margin: EdgeInsets.symmetric(horizontal: 7, vertical: 10),
+                height: 100,
+                width: MediaQuery.of(context).size.width * 0.35,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(
+                      15.0), // Set container background color
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // Set shadow color
+                      spreadRadius: 3, // Set the spread radius of the shadow
+                      blurRadius: 5, // Set the blur radius of the shadow
+                      offset: Offset(0, 3), // Set the offset of the shadow
+                    ),
+                  ],
+                ),
+                child: Text(
                   'Explore Knowledge',
                   style: TextStyle(
                     fontSize: 15,
