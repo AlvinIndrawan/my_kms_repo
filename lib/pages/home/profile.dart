@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
           width: MediaQuery.of(context).size.width,
           height: 300,
           decoration: BoxDecoration(
-            color: Colors.black, // Set container background color
+            color: Colors.blueAccent, // Set container background color
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5), // Set shadow color
@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
                   child: Icon(
                     Icons.person,
                     size: 60.0, // Icon size
-                    color: Colors.black, // Icon color
+                    color: Colors.blueAccent, // Icon color
                   ),
                 ),
                 SizedBox(height: 20),
@@ -191,7 +191,7 @@ class _ProfileState extends State<Profile> {
                       )),
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
+                        MaterialStateProperty.all<Color>(Colors.blueAccent),
                   ),
                 ),
               ),

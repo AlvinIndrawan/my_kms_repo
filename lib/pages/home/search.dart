@@ -30,7 +30,7 @@ class _SearchState extends State<Search> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -72,7 +72,7 @@ class _SearchState extends State<Search> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -105,7 +105,7 @@ class _SearchState extends State<Search> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -147,8 +147,11 @@ class _SearchState extends State<Search> {
                 controller: searchEditingController,
                 decoration: InputDecoration(
                   // suffixIcon: Icon(Icons.search),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueAccent),
+                  ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: BorderSide(color: Colors.blueAccent),
                   ),
                   hintText: 'Cari Knowledge..',
                 ),
@@ -186,7 +189,7 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.black),
+                      MaterialStateProperty.all<Color>(Colors.blueAccent),
                 ),
               ),
             )
@@ -202,7 +205,7 @@ class _SearchState extends State<Search> {
               padding: EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.grey,
+                  color: Colors.blueAccent,
                   width: 1.0,
                   style: BorderStyle.solid,
                 ),

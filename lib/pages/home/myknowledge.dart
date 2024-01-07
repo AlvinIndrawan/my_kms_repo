@@ -42,7 +42,7 @@ class _MyknowledgeState extends State<Myknowledge>
         Container(
           color: Colors.white,
           child: TabBar(
-            indicatorColor: Colors.black,
+            indicatorColor: Colors.blueAccent,
             controller: _tabController,
             tabs: const <Widget>[
               Tab(
@@ -50,9 +50,9 @@ class _MyknowledgeState extends State<Myknowledge>
                 child: Text(
                   'Published',
                   style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent),
                 ),
               ),
               Tab(
@@ -60,9 +60,9 @@ class _MyknowledgeState extends State<Myknowledge>
                 child: Text(
                   'Draft',
                   style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent),
                 ),
               ),
             ],

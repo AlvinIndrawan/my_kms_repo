@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           backgroundColor:
               Colors.white, // Set the background color of the AppBar
         ),
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
       // A widget which will be started on application startup
       home: Login(),

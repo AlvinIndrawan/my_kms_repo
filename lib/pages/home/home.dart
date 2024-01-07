@@ -43,9 +43,9 @@ class _HomeState extends State<Home> {
           (user != null) ? user['nama'] : '',
           // 'Nama User',
           style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueAccent),
         ),
         SizedBox(
           height: 25,
@@ -76,7 +76,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.build),
+                    Icon(Icons.build, color: Colors.blueAccent),
                     Text(
                       'Project Base',
                       textAlign: TextAlign.center,
@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.book),
+                    Icon(Icons.book, color: Colors.blueAccent),
                     Text(
                       'Modul Kuliah',
                       textAlign: TextAlign.center,
@@ -140,7 +140,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.info),
+                    Icon(Icons.info, color: Colors.blueAccent),
                     Text(
                       'Informasi',
                       textAlign: TextAlign.center,
@@ -172,7 +172,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.help_center),
+                    Icon(Icons.help_center, color: Colors.blueAccent),
                     Text(
                       'Helpdesk',
                       textAlign: TextAlign.center,
@@ -217,7 +217,7 @@ class _HomeState extends State<Home> {
               ),
               Spacer(),
               Image.asset(
-                'assets/images/image1.png',
+                'assets/images/image 1.png',
                 height: 100,
                 // width: MediaQuery.of(context).size.width *
                 //     0.25, // Set the height if needed
@@ -246,7 +246,7 @@ class _HomeState extends State<Home> {
           child: Row(
             children: [
               Image.asset(
-                'assets/images/image2.png',
+                'assets/images/image 2.png',
                 height: 100,
                 // width: MediaQuery.of(context).size.width *
                 //     0.25, // Set the height if needed
@@ -255,7 +255,7 @@ class _HomeState extends State<Home> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: Text(
-                  'Temukan berbagai knowledge yang ingin anda pelajari disini!',
+                  'Dapatkan informasi dan mempelajari berbagai knowledge disini!',
                   style: TextStyle(
                     fontSize: 15,
                   ),

@@ -181,7 +181,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -221,7 +221,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -252,7 +252,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -314,7 +314,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.grey,
+                        color: Colors.blueAccent,
                         width: 1.0,
                         style: BorderStyle.solid,
                       ),
@@ -355,7 +355,12 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                   TextField(
                     controller: judulEditingController,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                      ),
                       hintText: 'Judul Knowledge',
                       errorText: isJudulMandatoryFieldFilled
                           ? null
@@ -411,7 +416,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                               )),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xffdedede)),
+                                Color.fromARGB(255, 158, 198, 236)),
                           ),
                         ),
                       ),
@@ -437,7 +442,12 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                     controller: penjelasanEditingController,
                     maxLines: 7,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                      ),
                       hintText: 'Penjelasan isi knowledge',
                       errorText: isPenjelasanMandatoryFieldFilled
                           ? null
@@ -469,8 +479,8 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                             style: TextStyle(color: Colors.black),
                           )),
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Color(0xffdedede)),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 158, 198, 236)),
                       ),
                     ),
                   ),
@@ -596,7 +606,7 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                                 )),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
+                                  Colors.blueAccent),
                             ),
                           ),
                         ),
@@ -714,9 +724,10 @@ class _CreateKnowledgeState extends State<CreateKnowledge> {
                                 child: Text('Simpan Draft')),
                             style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
+                                  Colors.blueAccent),
                               side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(width: 1.0, color: Colors.black),
+                                BorderSide(
+                                    width: 1.0, color: Colors.blueAccent),
                               ),
                             ),
                           ),

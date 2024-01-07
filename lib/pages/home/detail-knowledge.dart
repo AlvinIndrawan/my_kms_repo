@@ -108,15 +108,16 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
         title: const Text(
           'Knowledge Management System',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
             // Navigate back to the previous screen
             if (widget.previous_page == 'search') {
@@ -195,7 +196,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                     MaterialStateProperty.resolveWith<Color>(
                                   (Set<MaterialState> states) {
                                     return Colors
-                                        .black; // Default background color
+                                        .orangeAccent; // Default background color
                                   },
                                 ),
                                 shape: MaterialStateProperty.all<
@@ -372,9 +373,9 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                       child: Container(
                         padding: EdgeInsets.all(15),
                         decoration: BoxDecoration(
-                          color: Color(0xffdedede),
+                          color: Color.fromARGB(255, 158, 198, 236),
                           border: Border.all(
-                            color: Colors.grey,
+                            color: Colors.blueAccent,
                             width: 1.0,
                             style: BorderStyle.solid,
                           ),
@@ -430,8 +431,13 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                 maxLines: 4,
                                 minLines: 1,
                                 decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.blueAccent),
+                                  ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
+                                    borderSide:
+                                        BorderSide(color: Colors.blueAccent),
                                   ),
                                   hintText: 'Tulis komentar..',
                                 ),
@@ -502,7 +508,7 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                   ),
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                          Colors.black),
+                                          Colors.blueAccent),
                                 ),
                               ),
                             )
@@ -532,9 +538,9 @@ class _DetailKnowledgeState extends State<DetailKnowledge> {
                                 padding: EdgeInsets.all(15),
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffdedede),
+                                  color: Color.fromARGB(255, 158, 198, 236),
                                   border: Border.all(
-                                    color: Colors.grey,
+                                    color: Colors.blueAccent,
                                     width: 1.0,
                                     style: BorderStyle.solid,
                                   ),

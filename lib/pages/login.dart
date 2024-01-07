@@ -72,21 +72,30 @@ class _LoginState extends State<Login> {
             child: Text(
               'Login',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent),
             ),
           ),
           Center(
             child: Text(
               'Knowledge Management System',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent),
             ),
           ),
           Center(
             child: Text(
               'Fakultas Ilmu Komputer',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent),
             ),
           ),
           SizedBox(height: 50),
@@ -97,7 +106,12 @@ class _LoginState extends State<Login> {
           TextField(
             controller: emailEditingController,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
               hintText: 'Email',
               errorText: isEmailMandatoryFieldFilled
                   ? null
@@ -112,7 +126,12 @@ class _LoginState extends State<Login> {
             controller: passwordEditingController,
             obscureText: true,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
               hintText: 'Password',
               errorText: isPasswordMandatoryFieldFilled
                   ? null
@@ -198,7 +217,8 @@ class _LoginState extends State<Login> {
                     style: TextStyle(color: Colors.white),
                   )),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.blueAccent),
               ),
             ),
           ),
@@ -219,9 +239,10 @@ class _LoginState extends State<Login> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                   child: Text('Create Account')),
               style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                foregroundColor:
+                    MaterialStateProperty.all<Color>(Colors.blueAccent),
                 side: MaterialStateProperty.all<BorderSide>(
-                  BorderSide(width: 1.0, color: Colors.black),
+                  BorderSide(width: 1.0, color: Colors.blueAccent),
                 ),
               ),
             ),

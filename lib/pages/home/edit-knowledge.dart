@@ -218,7 +218,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -258,7 +258,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -289,7 +289,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.blueAccent,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -321,15 +321,16 @@ class _EditKnowledgeState extends State<EditKnowledge> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
         title: const Text(
           'Knowledge Management System',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
             // Navigate back to the previous screen
             Navigator.pop(context);
@@ -368,7 +369,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Colors.grey,
+                          color: Colors.blueAccent,
                           width: 1.0,
                           style: BorderStyle.solid,
                         ),
@@ -409,7 +410,12 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                     TextField(
                       controller: judulEditingController,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueAccent),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueAccent),
+                        ),
                         hintText: 'Judul Knowledge',
                         errorText: isJudulMandatoryFieldFilled
                             ? null
@@ -499,7 +505,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                                 )),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xffdedede)),
+                                  Color.fromARGB(255, 158, 198, 236)),
                             ),
                           ),
                         ),
@@ -525,7 +531,12 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                       controller: penjelasanEditingController,
                       maxLines: 7,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueAccent),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueAccent),
+                        ),
                         hintText: 'Penjelasan isi knowledge',
                         errorText: isPenjelasanMandatoryFieldFilled
                             ? null
@@ -560,7 +571,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                             )),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              Color(0xffdedede)),
+                              Color.fromARGB(255, 158, 198, 236)),
                         ),
                       ),
                     ),
@@ -704,7 +715,7 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.black),
+                                        Colors.blueAccent),
                               ),
                             ),
                           ),
@@ -837,9 +848,10 @@ class _EditKnowledgeState extends State<EditKnowledge> {
                               style: ButtonStyle(
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.black),
+                                        Colors.blueAccent),
                                 side: MaterialStateProperty.all<BorderSide>(
-                                  BorderSide(width: 1.0, color: Colors.black),
+                                  BorderSide(
+                                      width: 1.0, color: Colors.blueAccent),
                                 ),
                               ),
                             ),

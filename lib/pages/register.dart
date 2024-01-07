@@ -116,7 +116,10 @@ class _RegisterState extends State<Register> {
           Text(
             'Create Account',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent),
           ),
           SizedBox(
             height: 30,
@@ -136,7 +139,7 @@ class _RegisterState extends State<Register> {
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.grey,
+                color: Colors.blueAccent,
                 width: 1.0,
                 style: BorderStyle.solid,
               ),
@@ -176,7 +179,12 @@ class _RegisterState extends State<Register> {
           TextField(
             controller: namaEditingController,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
               hintText: 'Nama',
               errorText: isNamaMandatoryFieldFilled
                   ? null
@@ -204,7 +212,7 @@ class _RegisterState extends State<Register> {
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.grey,
+                      color: Colors.blueAccent,
                       width: 1.0,
                       style: BorderStyle.solid,
                     ),
@@ -253,7 +261,12 @@ class _RegisterState extends State<Register> {
                   controller: nimEditingController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueAccent),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueAccent),
+                    ),
                     hintText: 'NIM/NIDN',
                     errorText: isNimMandatoryFieldFilled
                         ? null
@@ -281,7 +294,12 @@ class _RegisterState extends State<Register> {
           TextField(
             controller: emailEditingController,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
               hintText: 'Email',
               errorText: isEmailMandatoryFieldFilled
                   ? null
@@ -306,7 +324,12 @@ class _RegisterState extends State<Register> {
             controller: nohpEditingController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
               hintText: 'No HP',
               errorText: isNoHPMandatoryFieldFilled
                   ? null
@@ -331,7 +354,12 @@ class _RegisterState extends State<Register> {
             controller: passwordEditingController,
             obscureText: true,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
               hintText: 'Password',
               errorText: isPasswordMandatoryFieldFilled
                   ? (isPasswordSameWithConfirmPassword)
@@ -358,7 +386,12 @@ class _RegisterState extends State<Register> {
             controller: confrimPasswordEditingController,
             obscureText: true,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent),
+              ),
               hintText: 'Confirm Password',
               errorText: isConfirmPasswordMandatoryFieldFilled
                   ? (isPasswordSameWithConfirmPassword)
@@ -530,7 +563,7 @@ class _RegisterState extends State<Register> {
                         )),
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.black),
+                          MaterialStateProperty.all<Color>(Colors.blueAccent),
                     ),
                   ),
                 ),
@@ -551,9 +584,9 @@ class _RegisterState extends State<Register> {
                         child: Text('Login')),
                     style: ButtonStyle(
                       foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.black),
+                          MaterialStateProperty.all<Color>(Colors.blueAccent),
                       side: MaterialStateProperty.all<BorderSide>(
-                        BorderSide(width: 1.0, color: Colors.black),
+                        BorderSide(width: 1.0, color: Colors.blueAccent),
                       ),
                     ),
                   ),
